@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+    form.postgresql:
+        container_name: "${APP_NAME}_postgresql"
+        image: postgres:9.4
+        environment:
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_DATABASE}
+        volumes:
+            - form.postgresql.data:/var/lib/postgresql/data
+        ports:
+            - "6432:5432"
+
+    form.php:
+        container_name: "${APP_NAME}_php"
+        build: ./docker/php
+        working_dir: ${WORKING_DIR}
+        environment:
+            PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE}
+            PHP_XDEBUG_CLIENT_PORT: ${PHP_XDEBUG_CLIENT_PORT}
+            PHP_XDEBUG_CLIENT_HOST: ${PHP_XDEBUG_CLIENT_HOST}
+            DATABASE_URL: postgresql://${DB_USERNAME}:${DB_PASSWORD}@form.postgresql:5432/${DB_DATABASE}
+        volumes:
+            - ./:${WORKING_DIR}
+        links:
+            - form.postgresql
+            - form.memcached
+
+    form.nginx:
+        container_name: "${APP_NAME}_nginx"
+        image: nginx
+        links:
+            - form.php
+        ports:
+            - "${NGINX_PORT}:80"
+        volumes:
+            - ./:${WORKING_DIR}
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+    form.memcached:
+        container_name: "${APP_NAME}_memcached"
+        image: memcached:latest
+
+volumes:
+    form.postgresql.data:
