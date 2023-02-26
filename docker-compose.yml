@@ -2,13 +2,14 @@ version: '3.8'
 services:
     form.postgresql:
         container_name: "${APP_NAME}_postgresql"
-        image: postgres:9.4
+        image: postgres:13.7
         environment:
             POSTGRES_USER: ${DB_USERNAME}
             POSTGRES_PASSWORD: ${DB_PASSWORD}
             POSTGRES_DB: ${DB_DATABASE}
         volumes:
-            - form.postgresql.data:/var/lib/postgresql/data
+            - postgresql_data:/var/lib/postgresql/data
+            - ./docker-files:/tmp/dump
         ports:
             - "6432:5432"
 
@@ -43,4 +44,4 @@ services:
         image: memcached:latest
 
 volumes:
-    form.postgresql.data:
+    postgresql_data:
