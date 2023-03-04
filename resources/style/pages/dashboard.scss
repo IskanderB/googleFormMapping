@@ -1,0 +1,59 @@
+.content {
+    @apply flex;
+}
+
+.tasks {
+    @apply w-1/3 mr-8;
+
+    &__list {
+        @apply max-h-[320px] scrollbar scrollbar-thumb-gray-300 scrollbar-w-2 scrollbar-h-1 scrollbar-thumb-rounded-3xl pr-4 mb-6;
+    }
+
+    &__item {
+        @apply bg-white mb-2 p-6 rounded-2xl flex justify-between;
+    }
+
+    &__icon-settings:hover {
+        @apply text-gray-400 duration-300;
+    }
+}
+
+.applications {
+    @apply w-full;
+
+    &__item {
+        @apply bg-white mb-2 py-2 px-4 rounded-2xl flex w-full justify-between;
+    }
+
+    &__column {
+        @apply w-full flex;
+    }
+
+    &__action {
+        @apply mr-2;
+    }
+
+    &__icon-document-ready {
+        @apply text-green-600;
+    }
+
+    &__checkbox {
+        @apply mr-4;
+
+        input {
+            @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500;
+        }
+    }
+}
+
+.button {
+    @apply flex shrink-0 justify-center px-8 py-3.5 bg-base-gray text-base-white text-lg rounded-lg h-14 font-semibold w-full mr-4;
+
+    @screen md {
+        @apply w-auto;
+    }
+
+    &:hover {
+        @apply bg-base-gray-dark;
+    }
+}
