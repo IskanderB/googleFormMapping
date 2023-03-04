@@ -2,13 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Entity\Task;
+use App\Form\TaskFormType;
+use Barryvdh\Form\CreatesForms;
+use Barryvdh\Form\ValidatesForms;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class TaskController extends Controller
 {
-    public function create(Request $request): View
+    use ValidatesForms, CreatesForms;
+
+    public function task(Request $request, Task $task): View
     {
-        return view('page.task');
+        $form = $this->createForm(TaskFormType::class, $task);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            EntityManager::persist($task);
+            EntityManager::flush();
+        }
+
+        return view('page.task', [
+            'form' => $form->createView(),
+        ]);
     }
 }

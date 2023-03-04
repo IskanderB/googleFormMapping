@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/task', [TaskController::class, 'create'])->name('task.create');
+    Route::match(['get', 'post'],'/task/{task?}', [TaskController::class, 'task'])->name('task');
 });
 
 require __DIR__.'/auth.php';

@@ -183,7 +183,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
-
+        Barryvdh\Form\ServiceProvider::class,
         /*
          * Package Service Providers...
          */

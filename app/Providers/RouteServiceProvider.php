@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Entity\Task;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,12 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+        });
+
+        Route::bind('task', function (?int $id) {
+            $repository = EntityManager::getRepository(Task::class);
+
+            return $id ? $repository->findOneBy(['id' => $id]) : new Task();
         });
     }
 
