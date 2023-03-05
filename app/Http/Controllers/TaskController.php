@@ -20,7 +20,7 @@ class TaskController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             EntityManager::persist($task);
             EntityManager::flush();
         }

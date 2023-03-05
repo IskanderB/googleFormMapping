@@ -27,6 +27,7 @@ services:
         links:
             - form.postgresql
             - form.memcached
+            - form.redis
 
     form.nginx:
         container_name: "${APP_NAME}_nginx"
@@ -42,6 +43,24 @@ services:
     form.memcached:
         container_name: "${APP_NAME}_memcached"
         image: memcached:latest
+
+    form.redis:
+        container_name: "${APP_NAME}_redis"
+        image: redis:latest
+        ports:
+            - "${REDIS_PORT}:6379"
+
+    form.supervisor:
+        container_name: "${APP_NAME}_supervisor"
+        build: ./docker/supervisor
+        working_dir: ${WORKING_DIR}
+        environment:
+            DATABASE_URL: postgresql://${DB_USERNAME}:${DB_PASSWORD}@form.postgresql:5432/${DB_DATABASE}
+        volumes:
+            - ./:${WORKING_DIR}
+        links:
+            - form.postgresql
+            - form.redis
 
 volumes:
     postgresql_data:

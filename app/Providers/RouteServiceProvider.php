@@ -39,10 +39,14 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-        Route::bind('task', function (?int $id) {
-            $repository = EntityManager::getRepository(Task::class);
+        $repository = EntityManager::getRepository(Task::class);
 
+        Route::bind('task', function (?int $id) use ($repository) {
             return $id ? $repository->findOneBy(['id' => $id]) : new Task();
+        });
+
+        Route::bind('currentTask', function (?int $id) use ($repository) {
+            return $repository->findOneBy(['id' => $id]);
         });
     }
 
