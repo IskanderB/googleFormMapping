@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Entity\Task;
 use App\Form\TaskFormType;
 use App\Service\RefreshTaskService;
+use App\Service\StoreTaskService;
 use Barryvdh\Form\CreatesForms;
 use Barryvdh\Form\ValidatesForms;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use LaravelDoctrine\ORM\Facades\EntityManager;
+use Symfony\Component\Form\FormInterface;
 
 class TaskController extends Controller
 {
@@ -18,6 +19,7 @@ class TaskController extends Controller
 
     public function __construct(
         private RefreshTaskService $refreshTaskService,
+        private StoreTaskService $storeTaskService,
     ) {
     }
 
@@ -28,8 +30,7 @@ class TaskController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            EntityManager::persist($task);
-            EntityManager::flush();
+            $this->storeTask($task, $form);
         }
 
         return view('page.task', [
@@ -44,5 +45,13 @@ class TaskController extends Controller
         return response()->json([
             'success' => true,
         ]);
+    }
+
+    private function storeTask(Task $task, FormInterface $form): void
+    {
+        $this->storeTaskService->store(
+            task: $task,
+            layoutFiles: $form->get('layouts')->getData(),
+        );
     }
 }

@@ -29,6 +29,17 @@ return [
     */
 
     'disks' => [
+        'layout' => [
+            'driver' => 'local',
+            'root' => storage_path('layout'),
+            'throw' => false,
+        ],
+
+        'document' => [
+            'driver' => 'local',
+            'root' => storage_path('document'),
+            'throw' => false,
+        ],
 
         'local' => [
             'driver' => 'local',

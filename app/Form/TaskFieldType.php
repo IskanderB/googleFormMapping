@@ -15,8 +15,7 @@ class TaskFieldType extends AbstractType
     {
         $builder
             ->add('sheetKey', TextType::class)
-            ->add('documentKey', TextType::class)
-            ->add('preview', CheckboxType::class);
+            ->add('documentKey', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

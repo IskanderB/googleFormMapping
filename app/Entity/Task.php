@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\File\Document;
+use App\Entity\File\Layout;
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,10 +35,18 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $fields;
 
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: Layout::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $layouts;
+
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: Document::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $documents;
+
     public function __construct()
     {
         $this->rows = new ArrayCollection();
         $this->fields = new ArrayCollection();
+        $this->layouts = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     /**
@@ -45,16 +55,6 @@ class Task
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @param int|null $id
-     * @return Task
-     */
-    public function setId(?int $id): Task
-    {
-        $this->id = $id;
-        return $this;
     }
 
     /**
@@ -200,6 +200,82 @@ class Task
             $this->fields->removeElement($field);
 
             $field->setTask(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getLayouts(): Collection
+    {
+        return $this->layouts;
+    }
+
+    /**
+     * @param Layout $layout
+     * @return Task
+     */
+    public function addLayout(Layout $layout): Task
+    {
+        if (!$this->layouts->contains($layout)) {
+            $this->layouts->add($layout);
+
+            $layout->setTask($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Layout $layout
+     * @return $this
+     */
+    public function removeLayout(Layout $layout): self
+    {
+        if ($this->layouts->contains($layout)) {
+            $this->layouts->removeElement($layout);
+
+            $layout->setTask(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    /**
+     * @param Document $document
+     * @return Task
+     */
+    public function addDocument(Document $document): Task
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+
+            $document->setTask($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Document $document
+     * @return $this
+     */
+    public function removeDocument(Document $document): self
+    {
+        if ($this->documents->contains($document)) {
+            $this->documents->removeElement($document);
+
+            $document->setTask(null);
         }
 
         return $this;

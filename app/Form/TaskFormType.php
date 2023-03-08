@@ -5,10 +5,13 @@ namespace App\Form;
 use App\Entity\Task;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\File;
 
 class TaskFormType extends AbstractType
 {
@@ -17,7 +20,9 @@ class TaskFormType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('spreadsheetId', TextType::class)
-            ->add('sheetName', TextType::class)
+            ->add('sheetName', TextType::class, [
+                'required' => false,
+            ])
             ->add('preview', TextType::class)
             ->add('fields', CollectionType::class, [
                 'entry_type' => TaskFieldType::class,
@@ -26,6 +31,32 @@ class TaskFormType extends AbstractType
                 'by_reference' => false,
                 'prototype' => true,
                 'label' => false
+            ])
+            ->add('layouts', FileType::class, [
+                'label' => 'Шаблоны',
+                'mapped' => false,
+                'multiple' => true,
+                'required' => false,
+                'data_class' => null,
+                'attr' => [
+                    'accept' => implode(',', [
+                       '.docx', '.doc',
+                    ]),
+                    'multiple' => 'multiple',
+                ],
+                'constraints' => [
+                    new All([
+                        'constraints' => [
+                            new File(
+                                maxSize: '5m',
+                                mimeTypes: [
+                                    'application/msword',
+                                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                ],
+                            ),
+                        ],
+                    ]),
+                ],
             ])
             ->add('save', SubmitType::class, ['label' => 'Save task']);
     }

@@ -16,6 +16,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.1",
+        "ramsey/uuid-doctrine": "^2.0",
         "revolution/laravel-google-sheets": "^6.2"
     },
     "require-dev": {
