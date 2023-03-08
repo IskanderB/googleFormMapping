@@ -24,6 +24,9 @@ class Task
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sheetName = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preview = null;
+
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: Row::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $rows;
 
@@ -105,6 +108,24 @@ class Task
     public function setSheetName(?string $sheetName): Task
     {
         $this->sheetName = $sheetName;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPreview(): ?string
+    {
+        return $this->preview;
+    }
+
+    /**
+     * @param string|null $preview
+     * @return Task
+     */
+    public function setPreview(?string $preview): Task
+    {
+        $this->preview = $preview;
         return $this;
     }
 

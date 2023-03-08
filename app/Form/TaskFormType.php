@@ -18,6 +18,7 @@ class TaskFormType extends AbstractType
             ->add('name', TextType::class)
             ->add('spreadsheetId', TextType::class)
             ->add('sheetName', TextType::class)
+            ->add('preview', TextType::class)
             ->add('fields', CollectionType::class, [
                 'entry_type' => TaskFieldType::class,
                 'entry_options' => ['label' => false],

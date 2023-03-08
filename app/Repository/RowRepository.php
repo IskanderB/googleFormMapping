@@ -17,7 +17,7 @@ class RowRepository extends EntityRepository
     public function exists(Task $task, string $content): bool
     {
         return (bool) $this->findOneBy([
-            'content' => $content,
+            'content.content' => $content,
             'task' => $task,
         ]);
     }

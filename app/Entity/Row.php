@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RowRepository;
+use App\ValueObject\Content;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RowRepository::class)]
@@ -13,8 +14,8 @@ class Row
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'text', nullable: false)]
-    private ?string $content = null;
+    #[ORM\Embedded(class: Content::class, columnPrefix: false)]
+    private Content $content;
 
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'rows')]
     private ?Task $task;
@@ -28,18 +29,18 @@ class Row
     }
 
     /**
-     * @return string|null
+     * @return Content
      */
-    public function getContent(): ?string
+    public function getContent(): Content
     {
         return $this->content;
     }
 
     /**
-     * @param string|null $content
+     * @param Content $content
      * @return Row
      */
-    public function setContent(?string $content): Row
+    public function setContent(Content $content): Row
     {
         $this->content = $content;
         return $this;

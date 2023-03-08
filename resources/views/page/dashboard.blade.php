@@ -27,86 +27,42 @@
                     <div class="applications__checkbox">
                         <input type="checkbox">
                     </div>
-                    <div class="applications__column font-semibold">ФИО</div>
-                    <div class="applications__column font-semibold">Паспорт</div>
+                    <div class="applications__column font-semibold">{{ $task->getPreview() }}</div>
                     <div class="applications__column">
-                        <a class="applications__action" href="#">
-                            <svg class="applications__icon-document-create">
-                                <use xlink:href="#icon-document-create"></use>
-                            </svg>
-                        </a>
-                        <a class="applications__action" href="#">
-                            <svg class="applications__icon-refresh">
-                                <use xlink:href="#icon-refresh"></use>
-                            </svg>
-                        </a>
+                        <form id="task-refresh-form" class="max-h-0" action="{{ route('task.refresh', ['currentTask' => $task->getId()]) }}">
+                            <button class="applications__action">
+                                <svg class="applications__icon-refresh">
+                                    <use xlink:href="#icon-refresh"></use>
+                                </svg>
+                            </button>
+                        </form>
                     </div>
                 </div>
-                <div class="applications__item">
-                    <div class="applications__checkbox">
-                        <input type="checkbox">
+                @foreach($task->getRows() as $row)
+                    <div class="applications__item">
+                        <div class="applications__checkbox">
+                            <input type="checkbox">
+                        </div>
+                        <div class="applications__column">{{ $row->getContent()->getContent()[$task->getPreview()] ?? 'Нет совпадений с превью' }}</div>
+                        <div class="applications__column">
+                            <a class="applications__action" href="#">
+                                <svg class="applications__icon-document-create">
+                                    <use xlink:href="#icon-document-create"></use>
+                                </svg>
+                            </a>
+                            <a class="applications__action" href="#">
+                                <svg class="applications__icon-document-ready">
+                                    <use xlink:href="#icon-document-ready"></use>
+                                </svg>
+                            </a>
+                            <a class="applications__action" href="#">
+                                <svg class="applications__icon-refresh">
+                                    <use xlink:href="#icon-refresh"></use>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                    <div class="applications__column">Application #1</div>
-                    <div class="applications__column">Application #1</div>
-                    <div class="applications__column">
-                        <a class="applications__action" href="#">
-                            <svg class="applications__icon-document-create">
-                                <use xlink:href="#icon-document-create"></use>
-                            </svg>
-                        </a>
-                        <a class="applications__action" href="#">
-                            <svg class="applications__icon-document-ready">
-                                <use xlink:href="#icon-document-ready"></use>
-                            </svg>
-                        </a>
-                        <a class="applications__action" href="#">
-                            <svg class="applications__icon-refresh">
-                                <use xlink:href="#icon-refresh"></use>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <div class="applications__item">
-                    <div class="applications__checkbox">
-                        <input type="checkbox">
-                    </div>
-                    <div class="applications__column">Application #2</div>
-                    <div class="applications__column">Application #2</div>
-                    <div class="applications__column"></div>
-                </div>
-                <div class="applications__item">
-                    Application #3
-                </div>
-                <div class="applications__item">
-                    Application #2
-                </div>
-                <div class="applications__item">
-                    Application #1
-                </div>
-                <div class="applications__item">
-                    Application #3
-                </div>
-                <div class="applications__item">
-                    Application #2
-                </div>
-                <div class="applications__item">
-                    Application #1
-                </div>
-                <div class="applications__item">
-                    Application #3
-                </div>
-                <div class="applications__item">
-                    Application #2
-                </div>
-                <div class="applications__item">
-                    Application #1
-                </div>
-                <div class="applications__item">
-                    Application #3
-                </div>
-                <div class="applications__item">
-                    Application #2
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
