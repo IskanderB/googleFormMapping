@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Row;
 
+use App\Entity\Task\Task;
 use App\Repository\RowRepository;
 use App\ValueObject\Content;
 use Doctrine\ORM\Mapping as ORM;

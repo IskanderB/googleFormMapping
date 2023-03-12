@@ -2,8 +2,7 @@
 
 namespace App\Entity\File;
 
-use App\Entity\Task;
-
+use App\Entity\Task\Task;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]

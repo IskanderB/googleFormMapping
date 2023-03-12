@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Row;
-use App\Entity\Task;
+use App\Entity\Row\Row;
+use App\Entity\Task\Task;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Task;
 
 use App\Entity\File\Document;
 use App\Entity\File\Layout;
+use App\Entity\Row\Row;
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

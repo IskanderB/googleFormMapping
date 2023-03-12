@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Entity\Task;
+use App\Entity\Task\Task;
 use App\Form\TaskFormType;
 use App\Service\RefreshTaskService;
 use App\Service\StoreTaskService;

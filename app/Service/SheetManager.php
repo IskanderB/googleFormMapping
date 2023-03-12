@@ -2,16 +2,11 @@
 
 namespace App\Service;
 
-use App\Entity\Task;
+use App\Entity\Task\Task;
 use Revolution\Google\Sheets\Facades\Sheets;
 
 class SheetManager
 {
-    public function __construct(
-        private Sheets $sheets
-    ) {
-    }
-
     public function getRows(Task $task): array
     {
         if ($task->getSheetName() !== null) {

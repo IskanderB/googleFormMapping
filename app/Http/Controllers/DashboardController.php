@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Entity\Task;
+use App\Entity\Task\Task;
 use App\Repository\TaskRepository;
 use Illuminate\View\View;
+
 class DashboardController extends Controller
 {
     public function __construct(

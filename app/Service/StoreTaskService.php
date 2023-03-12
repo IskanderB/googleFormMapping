@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\File\Layout;
-use App\Entity\Task;
+use App\Entity\Task\Task;
 use App\Service\File\UploadFileService;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

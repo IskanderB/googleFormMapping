@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Row;
-use App\Entity\Task;
+use App\Entity\Row\Row;
+use App\Entity\Task\Task;
 use App\Message\TaskMessage;
 use App\Repository\RowRepository;
 use App\Repository\TaskRepository;
