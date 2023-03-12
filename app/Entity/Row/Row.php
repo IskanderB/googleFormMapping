@@ -5,6 +5,8 @@ namespace App\Entity\Row;
 use App\Entity\Task\Task;
 use App\Repository\RowRepository;
 use App\ValueObject\Content;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RowRepository::class)]
@@ -20,6 +22,14 @@ class Row
 
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'rows')]
     private ?Task $task;
+
+    #[ORM\OneToMany(mappedBy: 'row', targetEntity: Document::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $documents;
+
+    public function __construct()
+    {
+        $this->documents = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -62,6 +72,44 @@ class Row
     public function setTask(?Task $task): Row
     {
         $this->task = $task;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    /**
+     * @param Document $document
+     * @return Row
+     */
+    public function addDocument(Document $document): self
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+
+            $document->setRow($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Document $document
+     * @return Row
+     */
+    public function removeDocument(Document $document): self
+    {
+        if ($this->documents->contains($document)) {
+            $this->documents->removeElement($document);
+
+            $document->setRow(null);
+        }
+
         return $this;
     }
 }

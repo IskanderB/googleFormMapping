@@ -2,8 +2,6 @@
 
 namespace App\Entity\Task;
 
-use App\Entity\File\Document;
-use App\Entity\File\Layout;
 use App\Entity\Row\Row;
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,15 +37,11 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: Layout::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $layouts;
 
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: Document::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $documents;
-
     public function __construct()
     {
         $this->rows = new ArrayCollection();
         $this->fields = new ArrayCollection();
         $this->layouts = new ArrayCollection();
-        $this->documents = new ArrayCollection();
     }
 
     /**
@@ -239,44 +233,6 @@ class Task
             $this->layouts->removeElement($layout);
 
             $layout->setTask(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getDocuments(): Collection
-    {
-        return $this->documents;
-    }
-
-    /**
-     * @param Document $document
-     * @return Task
-     */
-    public function addDocument(Document $document): Task
-    {
-        if (!$this->documents->contains($document)) {
-            $this->documents->add($document);
-
-            $document->setTask($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Document $document
-     * @return $this
-     */
-    public function removeDocument(Document $document): self
-    {
-        if ($this->documents->contains($document)) {
-            $this->documents->removeElement($document);
-
-            $document->setTask(null);
         }
 
         return $this;
