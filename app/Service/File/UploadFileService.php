@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class UploadFileService
+class UploadFileService extends FileService
 {
     public function upload(UploadedFile $uploadedFile, string $storage, string $class): File
     {
@@ -52,11 +52,6 @@ class UploadFileService
         EntityManager::flush();
 
         return $file;
-    }
-
-    private function getPath(): string
-    {
-        return date('Y/m/d');
     }
 
     private function getNewFilename(UploadedFile $uploadedFile): string

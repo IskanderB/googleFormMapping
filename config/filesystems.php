@@ -41,6 +41,12 @@ return [
             'throw' => false,
         ],
 
+        'temporary' => [
+            'driver' => 'local',
+            'root' => sys_get_temp_dir(),
+            'throw' => false,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
