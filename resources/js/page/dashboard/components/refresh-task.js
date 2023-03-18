@@ -1,4 +1,4 @@
-import getCsrf from './get-csrf';
+import getCsrf from '../../../lib/get-csrf';
 
 let taskRefreshForm = document.getElementById('task-refresh-form');
 taskRefreshForm.addEventListener('submit', async (event) => {

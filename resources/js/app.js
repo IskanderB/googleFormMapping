@@ -6,5 +6,5 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-import './components/svg-sprite.js';
-import './components/refresh-task.js';
+import './lib/svg-sprite.js';
+import './page/dashboard/index';

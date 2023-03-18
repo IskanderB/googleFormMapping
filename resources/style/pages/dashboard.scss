@@ -21,12 +21,28 @@
 .applications {
     @apply w-full;
 
-    &__item {
+    &__header {
         @apply bg-white mb-2 py-2 px-4 rounded-2xl flex w-full justify-between;
+    }
+
+    &__item {
+        @apply w-full bg-white mb-2 py-2 px-4 rounded-2xl;
+    }
+
+    &__preview {
+        @apply flex w-full justify-between;
     }
 
     &__column {
         @apply w-full flex;
+    }
+
+    &__actions {
+        @apply flex justify-between w-full;
+
+        &--group {
+            @apply inline-flex;
+        }
     }
 
     &__action {
@@ -34,7 +50,15 @@
     }
 
     &__icon-document-ready {
-        @apply text-green-600;
+        @apply text-green-600 cursor-pointer;
+    }
+
+    &__icon-document-trash {
+        @apply cursor-pointer;
+    }
+
+    &__icon-drop {
+        @apply cursor-pointer;
     }
 
     &__checkbox {
@@ -42,6 +66,36 @@
 
         input {
             @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500;
+        }
+    }
+
+    &__details {
+        @apply mt-4 mb-2;
+
+        &--header {
+            @apply font-semibold mb-2 text-sm;
+        }
+    }
+
+    &__documents {
+        @apply mb-2;
+
+        &--item {
+            @apply bg-base-gray-lite py-1 px-4 rounded-lg inline-flex mb-2 mr-2 max-w-xl;
+        }
+
+        &--name {
+            @apply mr-2 overflow-hidden;
+        }
+    }
+
+    &__data {
+        &--item {
+            @apply flex border-b-2 py-2;
+        }
+
+        &--key {
+            @apply w-[15rem] ml-2 mr-2;
         }
     }
 }

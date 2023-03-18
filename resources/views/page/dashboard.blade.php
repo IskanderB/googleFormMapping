@@ -23,43 +23,115 @@
                 <a href="{{ route('task') }}" class="button">Добавить задачу</a>
             </div>
             <div class="applications">
-                <div class="applications__item">
+                <div class="applications__header">
                     <div class="applications__checkbox">
                         <input type="checkbox">
                     </div>
                     <div class="applications__column font-semibold">{{ $task->getPreview() }}</div>
                     <div class="applications__column">
-                        <form id="task-refresh-form" class="max-h-0" action="{{ route('task.refresh', ['currentTask' => $task->getId()]) }}">
-                            <button class="applications__action">
-                                <svg class="applications__icon-refresh">
-                                    <use xlink:href="#icon-refresh"></use>
-                                </svg>
-                            </button>
-                        </form>
+                        <div class="applications__actions">
+                            <div class="applications__actions--group">
+                                <div class="applications__action" href="#">
+                                    <svg class="applications__icon-document-ready">
+                                        <use xlink:href="#icon-document-ready"></use>
+                                    </svg>
+                                </div>
+                                <div class="applications__action" href="#">
+                                    <svg class="applications__icon-document-trash">
+                                        <use xlink:href="#icon-trash"></use>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="applications__actions--group">
+                                <form id="task-refresh-form" class="max-h-0" action="{{ route('task.refresh', ['currentTask' => $task->getId()]) }}">
+                                    <button>
+                                        <svg class="applications__icon-refresh">
+                                            <use xlink:href="#icon-refresh"></use>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @foreach($task->getRows() as $row)
                     <div class="applications__item">
-                        <div class="applications__checkbox">
-                            <input type="checkbox">
+                        <div class="applications__preview">
+                            <div class="applications__checkbox">
+                                <input type="checkbox">
+                            </div>
+                            <div class="applications__column">{{ $row->getContent()->getContent()[$task->getPreview()] ?? 'Нет совпадений с превью' }}</div>
+                            <div class="applications__column">
+                                <div class="applications__actions">
+                                    <div class="applications__actions--group">
+{{--                                        @if($row->getDocuments()->count() === 0)--}}
+                                            <a class="applications__action" href="#">
+                                                <svg class="applications__icon-document-create">
+                                                    <use xlink:href="#icon-document-create"></use>
+                                                </svg>
+                                            </a>
+{{--                                        @else--}}
+                                            <div class="applications__action" href="#">
+                                                <svg class="applications__icon-document-ready">
+                                                    <use xlink:href="#icon-document-ready"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="applications__action" href="#">
+                                                <svg class="applications__icon-document-trash">
+                                                    <use xlink:href="#icon-trash"></use>
+                                                </svg>
+                                            </div>
+{{--                                        @endif--}}
+                                    </div>
+                                    <div class="applications__actions--group">
+                                        <div class="applications__icon-drop applications__icon-drop-up hidden">
+                                            <svg>
+                                                <use xlink:href="#icon-drop-up"></use>
+                                            </svg>
+                                        </div>
+                                        <div class="applications__icon-drop applications__icon-drop-down">
+                                            <svg>
+                                                <use xlink:href="#icon-drop-down"></use>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="applications__column">{{ $row->getContent()->getContent()[$task->getPreview()] ?? 'Нет совпадений с превью' }}</div>
-                        <div class="applications__column">
-                            <a class="applications__action" href="#">
-                                <svg class="applications__icon-document-create">
-                                    <use xlink:href="#icon-document-create"></use>
-                                </svg>
-                            </a>
-                            <a class="applications__action" href="#">
-                                <svg class="applications__icon-document-ready">
-                                    <use xlink:href="#icon-document-ready"></use>
-                                </svg>
-                            </a>
-                            <a class="applications__action" href="#">
-                                <svg class="applications__icon-refresh">
-                                    <use xlink:href="#icon-refresh"></use>
-                                </svg>
-                            </a>
+{{--                            <a class="applications__action" href="#">--}}
+{{--                                <svg class="applications__icon-refresh">--}}
+{{--                                    <use xlink:href="#icon-refresh"></use>--}}
+{{--                                </svg>--}}
+{{--                            </a>--}}
+                        <div class="applications__details hidden">
+                            <div class="applications__documents">
+                                <div class="applications__details--header">Документы</div>
+                                <div class="applications__documents--list">
+                                    <a href="#" class="applications__documents--item">
+                                        <span class="applications__documents--name">{{ Str::limit('Документ 17777777777777777777777777777777777777777777777777777777777777777777777777777777777777', 50) }}</span>
+                                        <svg class="">
+                                            <use xlink:href="#icon-share"></use>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="applications__documents--item">
+                                        <span class="applications__documents--name">Документ 2</span>
+                                        <svg class="">
+                                            <use xlink:href="#icon-share"></use>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="applications__data">
+                                <div class="applications__details--header">Данные</div>
+                                <div class="applications__data--list">
+                                    @foreach($row->getContent()->getContent() as $key => $value)
+                                        <div class="applications__data--item">
+                                            <div class="applications__data--key">{{ Str::limit($key, 25) }}</div>
+                                            <div class="applications__data--value">{{ Str::limit($value, 75) }}</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endforeach

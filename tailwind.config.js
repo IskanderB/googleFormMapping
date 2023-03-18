@@ -31,6 +31,19 @@ module.exports = {
             8: "8px",
             default: "1px",
         },
+        fontSize: {
+            'xs': ['12px', {lineHeight: '14px'}],
+            'sm': ['14px', {lineHeight: '20px'}],
+            'base': ['16px', {lineHeight: '24px'}],
+            'lg': ['18px', {lineHeight: '28px'}],
+            '2lg': ['20px', {lineHeight: '24px'}],
+            '3lg': ['24px', {lineHeight: '36px'}],
+            'xl': ['32px', {lineHeight: '38px'}],
+            '2xl': ['40px', {lineHeight: '48px'}],
+            '2.5xl': ['44px', {lineHeight: '56px'}],
+            '3xl': ['48px;', {lineHeight: '56px'}],
+            '4xl': ['64px;', {lineHeight: '72px'}],
+        },
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
@@ -41,6 +54,7 @@ module.exports = {
                     'white': '#ffffff', // Снежно-белый
                     'gray': '#979dac', // Шиферный серый
                     'gray-dark': '#838895',
+                    'gray-lite': '#d4def0',
                 },
             },
         },
