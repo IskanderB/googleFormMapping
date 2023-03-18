@@ -29,6 +29,17 @@ return [
     */
 
     'disks' => [
+        'google' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folder' => env('GOOGLE_DRIVE_FOLDER'), // without folder is root of drive or team drive
+//            'teamDriveId' => '1DcWKd46d2PWI3mbrRvMnd356csTtFUb_',
+            'throw' => true,
+            'credentials' => env('GOOGLE_SERVICE_ACCOUNT_JSON_LOCATION', ''),
+        ],
+
         'layout' => [
             'driver' => 'local',
             'root' => storage_path('layout'),

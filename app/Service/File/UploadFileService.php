@@ -3,14 +3,19 @@
 namespace App\Service\File;
 
 use App\Entity\File\File;
-use Illuminate\Support\Facades\Storage;
+use App\File\FilesystemFactory;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class UploadFileService extends FileService
+class UploadFileService
 {
+    public function __construct(
+        private FilesystemFactory $filesystemFactory,
+    ) {
+    }
+
     public function upload(UploadedFile $uploadedFile, string $storage, string $class): File
     {
         if (!is_a($class, File::class, true)) {
@@ -31,7 +36,9 @@ class UploadFileService extends FileService
         $path = $directoryPath . '/' . $filename;
 
         $stream = fopen($uploadedFile->getPathname(), 'r');
-        Storage::disk($storage)->put($path, $stream);
+
+        $filesystem = $this->filesystemFactory->get($storage);
+        $filesystem->writeStream($path, $stream);
 
         // storage
         $file->setStorage($storage);
@@ -47,11 +54,18 @@ class UploadFileService extends FileService
         $file->setMimeType($uploadedFile->getMimeType());
         // size
         $file->setSize(max(0, $uploadedFile->getSize()));
+        // cloudId
+        $file->setCloudId($filesystem->getCloudId($path));
 
         EntityManager::persist($file);
         EntityManager::flush();
 
         return $file;
+    }
+
+    private function getPath(): string
+    {
+        return date('Y/m/d');
     }
 
     private function getNewFilename(UploadedFile $uploadedFile): string
