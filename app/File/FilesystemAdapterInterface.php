@@ -63,4 +63,18 @@ interface FilesystemAdapterInterface
      * @return string|null
      */
     public function getCloudId(string $path): ?string;
+
+    /**
+     * @param string $cloudId
+     *
+     * @return string|null
+     */
+    public function getCloudUrl(string $cloudId): ?string;
+
+    /**
+     * @param string $path
+     *
+     * @return string|null
+     */
+    public function getUrl(string $path): ?string;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Row;
+namespace App\Service\Document;
 
 use App\Document\DocumentReplacer;
 use App\Entity\File\DocumentFile;
@@ -9,8 +9,9 @@ use App\Entity\Task\Layout;
 use App\Repository\LayoutRepository;
 use App\Service\File\UploadFileService;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class DocumentService
+class GenerateDocumentService
 {
     public function __construct(
         private LayoutRepository $layoutRepository,
@@ -19,7 +20,7 @@ class DocumentService
     ) {
     }
 
-    public function create(int $layoutId, array $context): Document
+    public function generate(int $layoutId, array $context): Document
     {
         /** @var Layout $layout */
         $layout = $this->layoutRepository->find($layoutId);
@@ -33,7 +34,11 @@ class DocumentService
 
         /** @var DocumentFile $documentFile */
         $documentFile = $this->uploadFileService->upload(
-            uploadedFile: $temporaryFile,
+            uploadedFile: new UploadedFile(
+                path: $temporaryFile->getRealPath(),
+                originalName: $layoutFile->getOriginalName(),
+                mimeType: $layoutFile->getMimeType(),
+            ),
             storage: 'document',
             class: DocumentFile::class,
         );

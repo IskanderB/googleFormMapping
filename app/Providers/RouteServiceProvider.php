@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Entity\Row\Row;
 use App\Entity\Task\Task;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -39,15 +40,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-        $repository = EntityManager::getRepository(Task::class);
-
-        Route::bind('task', function (?int $id) use ($repository) {
-            return $id ? $repository->findOneBy(['id' => $id]) : new Task();
-        });
-
-        Route::bind('currentTask', function (?int $id) use ($repository) {
-            return $repository->findOneBy(['id' => $id]);
-        });
+        $this->bindTask();
+        $this->bindRow();
     }
 
     /**
@@ -59,6 +53,28 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+    }
+
+    private function bindRow(): void
+    {
+        $repository = EntityManager::getRepository(Row::class);
+
+        Route::bind('row', function (int $id) use ($repository) {
+            return $repository->findOneBy(['id' => $id]);
+        });
+    }
+
+    private function bindTask(): void
+    {
+        $repository = EntityManager::getRepository(Task::class);
+
+        Route::bind('task', function (?int $id) use ($repository) {
+            return $id ? $repository->findOneBy(['id' => $id]) : new Task();
+        });
+
+        Route::bind('currentTask', function (?int $id) use ($repository) {
+            return $repository->findOneBy(['id' => $id]);
         });
     }
 }

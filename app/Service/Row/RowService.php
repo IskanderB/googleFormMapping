@@ -2,52 +2,69 @@
 
 namespace App\Service\Row;
 
-use App\Entity\Row\Row;
-use App\Entity\Task\TaskField;
+use App\Dto\ShowDocumentDto;
+use App\Dto\ShowRowDto;
+use App\Entity\Task\Task;
 use App\Repository\RowRepository;
-use LaravelDoctrine\ORM\Facades\EntityManager;
+use App\Url\GoogleDocUrl;
 
 class RowService
 {
     public function __construct(
         private RowRepository $rowRepository,
-        private DocumentService $documentService,
     ) {
     }
 
-    public function createDocument(int $rowId, int $layoutId): void
+    public function get(Task $task): array
     {
-        /** @var Row $row */
-        $row = $this->rowRepository->find($rowId);
+        $rawRows = $this->rowRepository->getRows($task);
 
-        $document = $this->documentService->create($layoutId, $this->prepareContext($row));
+        $rows = [];
 
-        $row->addDocument($document);
+        foreach ($rawRows as $rawRow) {
+            $rows[] = $this->buildRow($rawRow);
+        }
 
-        EntityManager::persist($row);
-        EntityManager::flush();
-
+        return $rows;
     }
 
-    public function prepareContext(Row $row): array
+    private function buildRow(array $rawRow): ShowRowDto
     {
-        $fields = $row->getTask()->getFields();
+        return (new ShowRowDto())
+            ->setId($rawRow['id'])
+            ->setContent($rawRow['content'])
+            ->setDocuments($this->buildDocuments($rawRow['documents']));
+    }
 
-        $rowContext = $row->getContent()->getContent();
+    private function buildDocuments(array $rawDocuments): array
+    {
+        $documents = [];
 
-        $context = [];
+        foreach ($rawDocuments as $rawDocument) {
+            $document = $this->buildDocument($rawDocument);
 
-        /** @var TaskField $field */
-        foreach ($fields as $field) {
-            $sheetKey = $field->getSheetKey();
-
-            if (!isset($rowContext[$sheetKey])) {
+            if ($document === null) {
                 continue;
             }
 
-            $context[$field->getDocumentKey()] = $rowContext[$sheetKey];
+            $documents[] = $document;
         }
 
-        return $context;
+        return $documents;
+    }
+
+    private function buildDocument(array $rawDocument): ?ShowDocumentDto
+    {
+        if ($rawDocument['cloudId'] === null && $rawDocument['path'] === null) {
+            return null;
+        }
+
+        return (new ShowDocumentDto())
+            ->setOriginalName($rawDocument['originalName'])
+            ->setUrl(
+                $rawDocument['cloudId']
+                    ? new GoogleDocUrl($rawDocument['cloudId'])
+                    : $rawDocument['path']
+            );
     }
 }

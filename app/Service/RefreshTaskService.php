@@ -7,7 +7,6 @@ use App\Entity\Task\Task;
 use App\Message\TaskMessage;
 use App\Repository\RowRepository;
 use App\Repository\TaskRepository;
-use App\ValueObject\Content;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class RefreshTaskService
@@ -38,9 +37,7 @@ class RefreshTaskService
 
         $rows = $this->sheetManager->getRows($task);
 
-        foreach ($rows as $row) {
-            $content = new Content($row);
-
+        foreach ($rows as $content) {
             if ($this->rowRepository->exists($task, $content)) {
                 continue;
             }

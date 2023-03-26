@@ -3,6 +3,7 @@
 namespace App\File\Adapter;
 
 use App\File\AbstractFilesystemAdapter;
+use App\Url\GoogleDocUrl;
 use Google\Service\Drive\Permission;
 use Masbug\Flysystem\GoogleDriveAdapter;
 
@@ -22,6 +23,13 @@ class GoogleFilesystemAdapter extends AbstractFilesystemAdapter
         $this->setPermission($this->getCloudId($path));
     }
 
+    public function writeStream(string $path, $content): void
+    {
+        parent::writeStream($path, $content);
+
+        $this->setPermission($this->getCloudId($path));
+    }
+
     public function getDriver(): string
     {
         return 'google';
@@ -30,6 +38,11 @@ class GoogleFilesystemAdapter extends AbstractFilesystemAdapter
     public function getCloudId(string $path): ?string
     {
         return $this->adapter->visibility($path)->path();
+    }
+
+    public function getCloudUrl(string $cloudId): ?string
+    {
+        return new GoogleDocUrl($cloudId);
     }
 
     private function setPermission(string $cloudId): void

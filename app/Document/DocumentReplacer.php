@@ -5,11 +5,11 @@ namespace App\Document;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use PhpOffice\PhpWord\TemplateProcessor;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 class DocumentReplacer
 {
-    public function replace($stream, array $context, ?string $mimeType = null): UploadedFile
+    public function replace($stream, array $context): File
     {
         $temporaryFilepath = $this->createTemporaryFile($stream);
 
@@ -59,12 +59,8 @@ class DocumentReplacer
         return '{' . ltrim(rtrim($search, '}'), '{') . '}';
     }
 
-    private function getTemporaryFile(string $temporaryFilepath, ?string $mimeType = null): UploadedFile
+    private function getTemporaryFile(string $temporaryFilepath): File
     {
-        return new UploadedFile(
-            path: $temporaryFilepath,
-            originalName: 'replaced_document',
-            mimeType: $mimeType,
-        );
+        return new File($temporaryFilepath);
     }
 }

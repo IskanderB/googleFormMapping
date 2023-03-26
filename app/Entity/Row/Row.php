@@ -4,7 +4,6 @@ namespace App\Entity\Row;
 
 use App\Entity\Task\Task;
 use App\Repository\RowRepository;
-use App\ValueObject\Content;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,8 +16,8 @@ class Row
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Embedded(class: Content::class, columnPrefix: false)]
-    private Content $content;
+    #[ORM\Column(type: 'jsonb', nullable: false, options: ['jsonb' => true])]
+    private array $content = [];
 
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'rows')]
     private ?Task $task;
@@ -40,18 +39,18 @@ class Row
     }
 
     /**
-     * @return Content
+     * @return array
      */
-    public function getContent(): Content
+    public function getContent(): array
     {
         return $this->content;
     }
 
     /**
-     * @param Content $content
+     * @param array $content
      * @return Row
      */
-    public function setContent(Content $content): Row
+    public function setContent(array $content): Row
     {
         $this->content = $content;
         return $this;

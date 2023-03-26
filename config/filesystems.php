@@ -47,7 +47,7 @@ return [
         ],
 
         'document' => [
-            'driver' => 'local',
+            'driver' => 'google',
             'root' => storage_path('document'),
             'throw' => false,
         ],

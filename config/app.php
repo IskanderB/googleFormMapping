@@ -198,7 +198,7 @@ return [
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
-
+        App\Providers\DoctrineServiceProvider::class,
     ],
 
     /*

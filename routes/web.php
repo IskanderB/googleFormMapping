@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RowController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/task/{currentTask}/refresh', [TaskController::class, 'refresh'])->name('task.refresh');
 
     Route::get('/dashboard/{currentTask?}', [DashboardController::class, 'dashboard'])->name('dashboard')->defaults('currentTask', 15);
+
+    Route::post('row/{row}/documents/generate', [RowController::class, 'generate'])->name('row.documents.generate');
+
 });
 
 require __DIR__.'/auth.php';
