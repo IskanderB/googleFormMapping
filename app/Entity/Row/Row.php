@@ -2,6 +2,7 @@
 
 namespace App\Entity\Row;
 
+use App\Entity\File\Document;
 use App\Entity\Task\Task;
 use App\Repository\RowRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +23,10 @@ class Row
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'rows')]
     private ?Task $task;
 
-    #[ORM\OneToMany(mappedBy: 'row', targetEntity: Document::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinTable(name: 'rows_documents')]
+    #[ORM\JoinColumn(name: 'row_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'document_id', referencedColumnName: 'id', unique: true)]
+    #[ORM\ManyToMany(targetEntity: Document::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $documents;
 
     public function __construct()
@@ -90,8 +94,6 @@ class Row
     {
         if (!$this->documents->contains($document)) {
             $this->documents->add($document);
-
-            $document->setRow($this);
         }
 
         return $this;
@@ -105,8 +107,6 @@ class Row
     {
         if ($this->documents->contains($document)) {
             $this->documents->removeElement($document);
-
-            $document->setRow(null);
         }
 
         return $this;

@@ -2,6 +2,7 @@
 
 namespace App\Entity\Task;
 
+use App\Entity\File\Layout;
 use App\Entity\Row\Row;
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,7 +35,10 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $fields;
 
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: Layout::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinTable(name: 'tasks_layouts')]
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'layout_id', referencedColumnName: 'id', unique: true)]
+    #[ORM\ManyToMany(targetEntity: Layout::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $layouts;
 
     public function __construct()
@@ -216,8 +220,6 @@ class Task
     {
         if (!$this->layouts->contains($layout)) {
             $this->layouts->add($layout);
-
-            $layout->setTask($this);
         }
 
         return $this;
@@ -231,8 +233,6 @@ class Task
     {
         if ($this->layouts->contains($layout)) {
             $this->layouts->removeElement($layout);
-
-            $layout->setTask(null);
         }
 
         return $this;

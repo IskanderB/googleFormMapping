@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\RowController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
@@ -32,6 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{currentTask?}', [DashboardController::class, 'dashboard'])->name('dashboard')->defaults('currentTask', 15);
 
     Route::post('row/{row}/documents/generate', [RowController::class, 'generate'])->name('row.documents.generate');
+
+    Route::get('/files/{file}/show', [FileController::class, 'show'])->name('file.show');
+    Route::get('/files/{file}/download', [FileController::class, 'download'])->name('file.download');
 
 });
 

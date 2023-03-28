@@ -2,8 +2,8 @@
 
 namespace App\Service\Document;
 
+use App\Entity\File\Layout;
 use App\Entity\Row\Row;
-use App\Entity\Task\Layout;
 use App\Entity\Task\TaskField;
 use App\Message\GenerateDocumentMessage;
 use App\Repository\RowRepository;

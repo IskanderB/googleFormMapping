@@ -116,7 +116,7 @@
                                     <div class="applications__details--header">Документы</div>
                                     <div class="applications__documents--list">
                                         @foreach($row->getDocuments() as $document)
-                                            <a href="{{ $document->getUrl() }}" target="_blank" class="applications__documents--item">
+                                            <a href="{{ route('file.show', ['file' => $document->getUrl()]) }}" target="_blank" class="applications__documents--item">
                                                 <span class="applications__documents--name">{{ Str::limit($document->getOriginalName(), 50) }}</span>
                                                 <svg class="">
                                                     <use xlink:href="#icon-share"></use>

@@ -14,7 +14,7 @@ class RefreshTaskService
     public function __construct(
         private SheetManager $sheetManager,
         private RowRepository $rowRepository,
-        private TaskRepository $taskRepository
+        private TaskRepository $taskRepository,
     ) {
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Entity\File\File;
 use App\Entity\Row\Row;
 use App\Entity\Task\Task;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -42,6 +43,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->bindTask();
         $this->bindRow();
+        $this->bindFile();
     }
 
     /**
@@ -75,6 +77,15 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('currentTask', function (?int $id) use ($repository) {
             return $repository->findOneBy(['id' => $id]);
+        });
+    }
+
+    private function bindFile(): void
+    {
+        $repository = EntityManager::getRepository(File::class);
+
+        Route::bind('file', function (string $uuid) use ($repository) {
+            return $repository->findOneBy(['uuid' => $uuid]);
         });
     }
 }

@@ -61,10 +61,6 @@ class RowService
 
         return (new ShowDocumentDto())
             ->setOriginalName($rawDocument['originalName'])
-            ->setUrl(
-                $rawDocument['cloudId']
-                    ? new GoogleDocUrl($rawDocument['cloudId'])
-                    : $rawDocument['path']
-            );
+            ->setUrl($rawDocument['uuid']);
     }
 }

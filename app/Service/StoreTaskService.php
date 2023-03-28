@@ -2,8 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\File\LayoutFile;
-use App\Entity\Task\Layout;
+use App\Entity\File\Layout;
 use App\Entity\Task\Task;
 use App\Service\File\UploadFileService;
 use LaravelDoctrine\ORM\Facades\EntityManager;
@@ -32,12 +31,11 @@ class StoreTaskService
 
             foreach ($layoutFiles as $layoutFile) {
                 $task->addLayout(
-                    (new Layout())
-                        ->setFile($this->uploadFileService->upload(
-                            uploadedFile: $layoutFile,
-                            storage: 'layout',
-                            class: LayoutFile::class,
-                        ))
+                    $this->uploadFileService->upload(
+                        uploadedFile: $layoutFile,
+                        storage: 'layout',
+                        class: Layout::class,
+                    )
                 );
             }
 

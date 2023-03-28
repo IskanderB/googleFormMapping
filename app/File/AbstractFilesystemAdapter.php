@@ -36,12 +36,7 @@ abstract class AbstractFilesystemAdapter implements FilesystemAdapterInterface
         return null;
     }
 
-    public function getCloudUrl(string $cloudId): ?string
-    {
-        return null;
-    }
-
-    public function getUrl(string $path): ?string
+    public function getShowUrl(string $path): ?string
     {
         return null;
     }

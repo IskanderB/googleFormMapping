@@ -37,14 +37,15 @@ class RowRepository extends EntityRepository
                    'cloudId', f.cloud_id,
                    'originalName', f.original_name,
                    'storage', f.storage,
-                   'path', f.path
+                   'path', f.path,
+                   'uuid', f.uuid
                     )
                ) as documents
         FROM rows r
-        LEFT JOIN documents d
+        LEFT JOIN rows_documents d
         ON d.row_id = r.id
         LEFT JOIN files f
-        ON f.id = d.file_id
+        ON f.id = d.document_id
         WHERE r.task_id = :task
         GROUP BY r.id, r.content
         SQL;
