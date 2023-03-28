@@ -27,7 +27,7 @@
                     <div class="applications__checkbox">
                         <input type="checkbox">
                     </div>
-                    <div class="applications__column font-semibold">{{ $task->getPreview() }}</div>
+                    <div class="applications__column font-semibold">{{ $currentTask ? $currentTask->getPreviewField()->getSheetKey() : 'Превью' }}</div>
                     <div class="applications__column">
                         <div class="applications__actions">
                             <div class="applications__actions--group">
@@ -43,13 +43,15 @@
                                 </div>
                             </div>
                             <div class="applications__actions--group">
-                                <form id="task-refresh-form" class="max-h-0" action="{{ route('task.refresh', ['currentTask' => $task->getId()]) }}">
-                                    <button>
-                                        <svg class="applications__icon-refresh">
-                                            <use xlink:href="#icon-refresh"></use>
-                                        </svg>
-                                    </button>
-                                </form>
+                                @if($currentTask !== null)
+                                    <form id="task-refresh-form" class="max-h-0" action="{{ route('task.refresh', ['currentTask' => $currentTask->getId()]) }}">
+                                        <button>
+                                            <svg class="applications__icon-refresh">
+                                                <use xlink:href="#icon-refresh"></use>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -60,7 +62,7 @@
                             <div class="applications__checkbox">
                                 <input type="checkbox">
                             </div>
-                            <div class="applications__column">{{ $row->getContent()[$task->getPreview()] ?? 'Нет совпадений с превью' }}</div>
+                            <div class="applications__column">{{ $row->getContent()[$currentTask->getPreviewField()->getSheetKey()] ?? 'Нет совпадений с превью' }}</div>
                             <div class="applications__column">
                                 <div class="applications__actions">
                                     <div class="applications__actions--group">

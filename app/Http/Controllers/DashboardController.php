@@ -15,12 +15,12 @@ class DashboardController extends Controller
     ) {
     }
 
-    public function dashboard(Task $currentTask): View
+    public function dashboard(?Task $currentTask = null): View
     {
         return view('page.dashboard', [
             'tasks' => $this->taskRepository->findAll(),
             'currentTask' => $currentTask,
-            'rows' => $this->rowService->get($currentTask),
+            'rows' => $currentTask ? $this->rowService->get($currentTask) : [],
         ]);
     }
 }

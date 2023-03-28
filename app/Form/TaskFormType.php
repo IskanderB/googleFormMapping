@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Task\Task;
+use App\Form\TaskField\IndexType;
+use App\Form\TaskField\PreviewType;
+use App\Form\TaskField\ReplacebleType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -23,9 +26,10 @@ class TaskFormType extends AbstractType
             ->add('sheetName', TextType::class, [
                 'required' => false,
             ])
-            ->add('preview', TextType::class)
-            ->add('fields', CollectionType::class, [
-                'entry_type' => TaskFieldType::class,
+            ->add('indexField', IndexType::class)
+            ->add('previewField', PreviewType::class)
+            ->add('replacebleFields', CollectionType::class, [
+                'entry_type' => ReplacebleType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'by_reference' => false,

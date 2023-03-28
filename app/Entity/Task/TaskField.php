@@ -2,28 +2,32 @@
 
 namespace App\Entity\Task;
 
+use App\Entity\Task\Field\IndexField;
+use App\Entity\Task\Field\PreviewField;
+use App\Entity\Task\Field\ReplacebleField;
 use App\Repository\TaskFieldRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskFieldRepository::class)]
-class TaskField
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap([
+    'replaceble' => ReplacebleField::class,
+    'index' => IndexField::class,
+    'preview' => PreviewField::class,
+])]
+abstract class TaskField
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $sheetKey = null;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $documentKey = null;
-
-    #[ORM\Column(nullable: false, options: ['default' => false])]
-    private bool $preview = false;
-
-    #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'fields')]
-    private ?Task $task;
 
     /**
      * @return int|null
@@ -66,42 +70,6 @@ class TaskField
     public function setDocumentKey(?string $documentKey): TaskField
     {
         $this->documentKey = $documentKey;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPreview(): bool
-    {
-        return $this->preview;
-    }
-
-    /**
-     * @param bool $preview
-     * @return TaskField
-     */
-    public function setPreview(bool $preview): TaskField
-    {
-        $this->preview = $preview;
-        return $this;
-    }
-
-    /**
-     * @return Task|null
-     */
-    public function getTask(): ?Task
-    {
-        return $this->task;
-    }
-
-    /**
-     * @param Task|null $task
-     * @return TaskField
-     */
-    public function setTask(?Task $task): TaskField
-    {
-        $this->task = $task;
         return $this;
     }
 }

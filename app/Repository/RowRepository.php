@@ -34,7 +34,6 @@ class RowRepository extends EntityRepository
         SELECT r.id as id, r.content as content,
                jsonb_agg(
                    json_build_object(
-                   'cloudId', f.cloud_id,
                    'originalName', f.original_name,
                    'storage', f.storage,
                    'path', f.path,

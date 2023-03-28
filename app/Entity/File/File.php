@@ -45,9 +45,6 @@ abstract class File
     #[ORM\Column(nullable: false)]
     private ?int $size = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $cloudId = null;
-
     #[ORM\Column(nullable: false)]
     private ?DateTime $createdAt = null;
 
@@ -216,24 +213,6 @@ abstract class File
     public function setSize(?int $size): File
     {
         $this->size = $size;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getCloudId(): ?string
-    {
-        return $this->cloudId;
-    }
-
-    /**
-     * @param string|null $cloudId
-     * @return File
-     */
-    public function setCloudId(?string $cloudId): File
-    {
-        $this->cloudId = $cloudId;
         return $this;
     }
 

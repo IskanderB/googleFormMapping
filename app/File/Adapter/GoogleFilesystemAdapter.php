@@ -35,14 +35,14 @@ class GoogleFilesystemAdapter extends AbstractFilesystemAdapter
         return 'google';
     }
 
-    public function getCloudId(string $path): ?string
-    {
-        return $this->adapter->visibility($path)->path();
-    }
-
     public function getShowUrl(string $path): ?string
     {
         return new GoogleDocUrl($this->getCloudId($path));
+    }
+
+    private function getCloudId(string $path): ?string
+    {
+        return $this->adapter->visibility($path)->path();
     }
 
     private function setPermission(string $cloudId): void

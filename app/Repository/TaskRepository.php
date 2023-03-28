@@ -12,4 +12,13 @@ class TaskRepository extends EntityRepository
     {
         parent::__construct($em, $em->getClassMetadata(Task::class));
     }
+
+    public function getLastTask(): ?Task
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

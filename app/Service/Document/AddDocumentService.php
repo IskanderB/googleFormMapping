@@ -45,7 +45,7 @@ class AddDocumentService
 
     private function prepareContext(Row $row): array
     {
-        $fields = $row->getTask()->getFields();
+        $fields = $row->getTask()->getReplacebleFields();
 
         $rowContext = $row->getContent();
 

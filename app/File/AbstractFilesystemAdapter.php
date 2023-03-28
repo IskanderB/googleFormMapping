@@ -31,11 +31,6 @@ abstract class AbstractFilesystemAdapter implements FilesystemAdapterInterface
         return Storage::disk($this->storage)->readStream($path);
     }
 
-    public function getCloudId(string $path): ?string
-    {
-        return null;
-    }
-
     public function getShowUrl(string $path): ?string
     {
         return null;

@@ -54,8 +54,6 @@ class UploadFileService
         $file->setMimeType($uploadedFile->getMimeType());
         // size
         $file->setSize(max(0, $uploadedFile->getSize()));
-        // cloudId
-        $file->setCloudId($filesystem->getCloudId($path));
 
         EntityManager::persist($file);
         EntityManager::flush();

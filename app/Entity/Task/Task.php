@@ -4,6 +4,9 @@ namespace App\Entity\Task;
 
 use App\Entity\File\Layout;
 use App\Entity\Row\Row;
+use App\Entity\Task\Field\IndexField;
+use App\Entity\Task\Field\PreviewField;
+use App\Entity\Task\Field\ReplacebleField;
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,14 +29,17 @@ class Task
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sheetName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $preview = null;
+    #[ORM\OneToOne(mappedBy: 'task', targetEntity: IndexField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private IndexField $indexField;
+
+    #[ORM\OneToOne(mappedBy: 'task', targetEntity: PreviewField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private PreviewField $previewField;
 
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: Row::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $rows;
 
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $fields;
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: ReplacebleField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $replacebleFields;
 
     #[ORM\JoinTable(name: 'tasks_layouts')]
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id')]
@@ -44,7 +50,7 @@ class Task
     public function __construct()
     {
         $this->rows = new ArrayCollection();
-        $this->fields = new ArrayCollection();
+        $this->replacebleFields = new ArrayCollection();
         $this->layouts = new ArrayCollection();
     }
 
@@ -111,20 +117,44 @@ class Task
     }
 
     /**
-     * @return string|null
+     * @return IndexField
      */
-    public function getPreview(): ?string
+    public function getIndexField(): IndexField
     {
-        return $this->preview;
+        return $this->indexField;
     }
 
     /**
-     * @param string|null $preview
+     * @param IndexField $indexField
      * @return Task
      */
-    public function setPreview(?string $preview): Task
+    public function setIndexField(IndexField $indexField): Task
     {
-        $this->preview = $preview;
+        $this->indexField = $indexField;
+
+        $indexField->setTask($this);
+
+        return $this;
+    }
+
+    /**
+     * @return PreviewField
+     */
+    public function getPreviewField(): PreviewField
+    {
+        return $this->previewField;
+    }
+
+    /**
+     * @param PreviewField $previewField
+     * @return Task
+     */
+    public function setPreviewField(PreviewField $previewField): Task
+    {
+        $this->previewField = $previewField;
+
+        $previewField->setTask($this);
+
         return $this;
     }
 
@@ -169,36 +199,36 @@ class Task
     /**
      * @return Collection
      */
-    public function getFields(): Collection
+    public function getReplacebleFields(): Collection
     {
-        return $this->fields;
+        return $this->replacebleFields;
     }
 
     /**
-     * @param TaskField $field
+     * @param ReplacebleField $replacebleField
      * @return $this
      */
-    public function addField(TaskField $field): self
+    public function addReplacebleField(ReplacebleField $replacebleField): self
     {
-        if (!$this->fields->contains($field)) {
-            $this->fields->add($field);
+        if (!$this->replacebleFields->contains($replacebleField)) {
+            $this->replacebleFields->add($replacebleField);
 
-            $field->setTask($this);
+            $replacebleField->setTask($this);
         }
 
         return $this;
     }
 
     /**
-     * @param TaskField $field
+     * @param ReplacebleField $replacebleField
      * @return $this
      */
-    public function removeField(TaskField $field): self
+    public function removeReplacebleField(ReplacebleField $replacebleField): self
     {
-        if ($this->fields->contains($field)) {
-            $this->fields->removeElement($field);
+        if ($this->replacebleFields->contains($replacebleField)) {
+            $this->replacebleFields->removeElement($replacebleField);
 
-            $field->setTask(null);
+            $replacebleField->setTask(null);
         }
 
         return $this;

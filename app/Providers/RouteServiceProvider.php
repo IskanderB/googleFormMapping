@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Entity\File\File;
 use App\Entity\Row\Row;
 use App\Entity\Task\Task;
+use App\Repository\TaskRepository;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -69,14 +70,17 @@ class RouteServiceProvider extends ServiceProvider
 
     private function bindTask(): void
     {
+        /** @var TaskRepository $repository */
         $repository = EntityManager::getRepository(Task::class);
 
         Route::bind('task', function (?int $id) use ($repository) {
             return $id ? $repository->findOneBy(['id' => $id]) : new Task();
         });
 
-        Route::bind('currentTask', function (?int $id) use ($repository) {
-            return $repository->findOneBy(['id' => $id]);
+        Route::bind('currentTask', function (?int $id) use ($repository): ?Task {
+            return $id
+                ? $repository->findOneBy(['id' => $id])
+                : $repository->getLastTask();
         });
     }
 

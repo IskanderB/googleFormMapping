@@ -55,7 +55,7 @@ class RowService
 
     private function buildDocument(array $rawDocument): ?ShowDocumentDto
     {
-        if ($rawDocument['cloudId'] === null && $rawDocument['path'] === null) {
+        if ($rawDocument['path'] === null) {
             return null;
         }
 
