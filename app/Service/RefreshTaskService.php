@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Lock\Lock;
 use App\Entity\Row\Row;
 use App\Entity\Task\Task;
 use App\Message\TaskMessage;
@@ -42,7 +43,9 @@ class RefreshTaskService
                 continue;
             }
 
-            $rowEntity = (new Row())->setContent($content);
+            $rowEntity = (new Row())
+                ->setContent($content)
+                ->setLock(new Lock());
 
             EntityManager::persist($rowEntity);
 

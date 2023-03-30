@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Entity\Task\Task;
+use App\Repository\RowRepository;
 use App\Repository\TaskRepository;
-use App\Service\Row\RowService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     public function __construct(
         private TaskRepository $taskRepository,
-        private RowService $rowService,
+        private RowRepository $rowRepository,
     ) {
     }
 
@@ -20,7 +20,7 @@ class DashboardController extends Controller
         return view('page.dashboard', [
             'tasks' => $this->taskRepository->findAll(),
             'currentTask' => $currentTask,
-            'rows' => $currentTask ? $this->rowService->get($currentTask) : [],
+            'rows' => $currentTask ? $this->rowRepository->findBy(['task' => $currentTask]) : [],
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Entity\Row;
 
 use App\Entity\File\Document;
+use App\Entity\Lock\Lock;
 use App\Entity\Task\Task;
 use App\Repository\RowRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +23,10 @@ class Row
 
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'rows')]
     private ?Task $task;
+
+    #[ORM\JoinColumn(name: 'lock_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\OneToOne(targetEntity: Lock::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private ?Lock $lock = null;
 
     #[ORM\JoinTable(name: 'rows_documents')]
     #[ORM\JoinColumn(name: 'row_id', referencedColumnName: 'id')]
@@ -75,6 +80,24 @@ class Row
     public function setTask(?Task $task): Row
     {
         $this->task = $task;
+        return $this;
+    }
+
+    /**
+     * @return Lock|null
+     */
+    public function getLock(): ?Lock
+    {
+        return $this->lock;
+    }
+
+    /**
+     * @param Lock|null $lock
+     * @return Row
+     */
+    public function setLock(?Lock $lock): Row
+    {
+        $this->lock = $lock;
         return $this;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity\Task;
 
+use App\Entity\Lock\Lock;
 use App\Entity\File\Layout;
 use App\Entity\Row\Row;
 use App\Entity\Task\Field\IndexField;
@@ -34,6 +35,10 @@ class Task
 
     #[ORM\OneToOne(mappedBy: 'task', targetEntity: PreviewField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private PreviewField $previewField;
+
+    #[ORM\JoinColumn(name: 'lock_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\OneToOne(targetEntity: Lock::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private ?Lock $lock = null;
 
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: Row::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $rows;
@@ -155,6 +160,24 @@ class Task
 
         $previewField->setTask($this);
 
+        return $this;
+    }
+
+    /**
+     * @return Lock
+     */
+    public function getLock(): Lock
+    {
+        return $this->lock;
+    }
+
+    /**
+     * @param Lock $lock
+     * @return Task
+     */
+    public function setLock(Lock $lock): Task
+    {
+        $this->lock = $lock;
         return $this;
     }
 

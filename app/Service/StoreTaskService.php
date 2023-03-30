@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\File\Layout;
 use App\Entity\Task\Task;
 use App\Service\File\UploadFileService;
+use App\Entity\Lock\Lock;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
@@ -30,7 +31,8 @@ class StoreTaskService
             EntityManager::beginTransaction();
 
             foreach ($layoutFiles as $layoutFile) {
-                $task->addLayout(
+                $task
+                    ->addLayout(
                     $this->uploadFileService->upload(
                         uploadedFile: $layoutFile,
                         storage: 'layout',
@@ -38,6 +40,8 @@ class StoreTaskService
                     )
                 );
             }
+
+            $task->setLock(new Lock());
 
             EntityManager::persist($task);
             EntityManager::flush();

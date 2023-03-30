@@ -56,7 +56,7 @@
                         </div>
                     </div>
                 </div>
-                @foreach($rows as $row)
+                @foreach($currentTask->getRows() as $row)
                     <div class="applications__item">
                         <div class="applications__preview">
                             <div class="applications__checkbox">
@@ -66,7 +66,7 @@
                             <div class="applications__column">
                                 <div class="applications__actions">
                                     <div class="applications__actions--group">
-                                        @if(empty($row->getDocuments()))
+                                        @if($row->getDocuments()->isEmpty())
                                             <form class="max-h-0 documents-create-form" action="{{ route('row.documents.generate', ['row' => $row->getId()]) }}">
                                                 <button class="applications__action">
                                                     <svg class="applications__icon-document-create">
@@ -113,12 +113,12 @@
 {{--                                </svg>--}}
 {{--                            </a>--}}
                         <div class="applications__details hidden">
-                            @if(!empty($row->getDocuments()))
+                            @if($row->getDocuments()->isEmpty() === false)
                                 <div class="applications__documents">
                                     <div class="applications__details--header">Документы</div>
                                     <div class="applications__documents--list">
                                         @foreach($row->getDocuments() as $document)
-                                            <a href="{{ route('file.show', ['file' => $document->getUrl()]) }}" target="_blank" class="applications__documents--item">
+                                            <a href="{{ route('file.show', ['file' => $document->getUuid()]) }}" target="_blank" class="applications__documents--item">
                                                 <span class="applications__documents--name">{{ Str::limit($document->getOriginalName(), 50) }}</span>
                                                 <svg class="">
                                                     <use xlink:href="#icon-share"></use>
