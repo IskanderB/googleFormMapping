@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Entity\Lock\Lock;
 use App\Entity\Row\Row;
 use App\Entity\Task\Task;
+use App\Event\Task\AfterTaskRefreshEvent;
+use App\Event\Task\BeforeTaskRefreshEvent;
 use App\Message\TaskMessage;
 use App\Repository\RowRepository;
 use App\Repository\TaskRepository;
@@ -28,6 +30,8 @@ class RefreshTaskService
 
     public function refresh(Task $task): void
     {
+        BeforeTaskRefreshEvent::dispatch($task);
+
         TaskMessage::dispatch($task->getId());
     }
 
@@ -53,5 +57,7 @@ class RefreshTaskService
         }
 
         EntityManager::flush();
+
+        AfterTaskRefreshEvent::dispatch($task);
     }
 }

@@ -61,6 +61,10 @@
         @apply cursor-pointer;
     }
 
+    &__icon-loading {
+        @apply w-[1.5rem] h-[1.5rem];
+    }
+
     &__checkbox {
         @apply mr-4;
 

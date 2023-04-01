@@ -31,12 +31,12 @@
                     <div class="applications__column">
                         <div class="applications__actions">
                             <div class="applications__actions--group">
-                                <div class="applications__action" href="#">
+                                <div class="applications__action">
                                     <svg class="applications__icon-document-ready">
                                         <use xlink:href="#icon-document-ready"></use>
                                     </svg>
                                 </div>
-                                <div class="applications__action" href="#">
+                                <div class="applications__action">
                                     <svg class="applications__icon-document-trash">
                                         <use xlink:href="#icon-trash"></use>
                                     </svg>
@@ -44,13 +44,18 @@
                             </div>
                             <div class="applications__actions--group">
                                 @if($currentTask !== null)
-                                    <form id="task-refresh-form" class="max-h-0" action="{{ route('task.refresh', ['currentTask' => $currentTask->getId()]) }}">
+                                    @php $currentTaskLocked = $currentTask->getLock()->getLockedUntil() > new DateTime @endphp
+
+                                    <form id="task-refresh-form" class="max-h-0 {{ $currentTaskLocked ? 'hidden' : '' }}" action="{{ route('task.refresh', ['currentTask' => $currentTask->getId()]) }}">
                                         <button>
                                             <svg class="applications__icon-refresh">
                                                 <use xlink:href="#icon-refresh"></use>
                                             </svg>
                                         </button>
                                     </form>
+                                    <div class="applications__icon-loading {{ $currentTaskLocked ? '' : 'hidden' }}">
+                                        <img src="{{ Vite::asset('resources/images/loading.gif') }}" alt="">
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -66,26 +71,27 @@
                             <div class="applications__column">
                                 <div class="applications__actions">
                                     <div class="applications__actions--group">
-                                        @if($row->getDocuments()->isEmpty())
-                                            <form class="max-h-0 documents-create-form" action="{{ route('row.documents.generate', ['row' => $row->getId()]) }}">
+                                        @if($row->getDocuments()->count() !== $currentTask->getLayouts()->count())
+
+                                            @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
+
+                                            <form class="max-h-0 documents-create-form {{ $rowLocked ? 'hidden' : '' }}" action="{{ route('row.documents.generate', ['row' => $row->getId()]) }}">
                                                 <button class="applications__action">
                                                     <svg class="applications__icon-document-create">
                                                         <use xlink:href="#icon-document-create"></use>
                                                     </svg>
                                                 </button>
                                             </form>
-{{--                                            <a class="applications__action" href="#">--}}
-{{--                                                <svg class="applications__icon-document-create">--}}
-{{--                                                    <use xlink:href="#icon-document-create"></use>--}}
-{{--                                                </svg>--}}
-{{--                                            </a>--}}
+                                            <div class="applications__action applications__icon-loading {{ $rowLocked ? '' : 'hidden' }}">
+                                                <img src="{{ Vite::asset('resources/images/loading.gif') }}" alt="">
+                                            </div>
                                         @else
-                                            <div class="applications__action" href="#">
+                                            <div class="applications__action">
                                                 <svg class="applications__icon-document-ready">
                                                     <use xlink:href="#icon-document-ready"></use>
                                                 </svg>
                                             </div>
-                                            <div class="applications__action" href="#">
+                                            <div class="applications__action">
                                                 <svg class="applications__icon-document-trash">
                                                     <use xlink:href="#icon-trash"></use>
                                                 </svg>
@@ -107,11 +113,6 @@
                                 </div>
                             </div>
                         </div>
-{{--                            <a class="applications__action" href="#">--}}
-{{--                                <svg class="applications__icon-refresh">--}}
-{{--                                    <use xlink:href="#icon-refresh"></use>--}}
-{{--                                </svg>--}}
-{{--                            </a>--}}
                         <div class="applications__details hidden">
                             @if($row->getDocuments()->isEmpty() === false)
                                 <div class="applications__documents">

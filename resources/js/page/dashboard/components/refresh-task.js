@@ -1,4 +1,5 @@
 import getCsrf from '../../../lib/get-csrf';
+import toggle from "../../../lib/toggle";
 
 let taskRefreshForm = document.getElementById('task-refresh-form');
 taskRefreshForm.addEventListener('submit', async (event) => {
@@ -11,11 +12,14 @@ taskRefreshForm.addEventListener('submit', async (event) => {
         },
     });
 
-    if (response.ok) {
-        let json = await response.json();
+    let container = event.target.closest('.applications__actions--group');
+    let refreshIcon = container.querySelector('#task-refresh-form');
+    let loadingIcon = container.querySelector('.applications__icon-loading');
 
-        console.log(json);
+    if (response.ok) {
+        toggle(refreshIcon, 'hidden');
+        toggle(loadingIcon, 'hidden');
     } else {
-        console.log('Refresh failed');
+        toggle(refreshIcon, 'hidden');
     }
 });

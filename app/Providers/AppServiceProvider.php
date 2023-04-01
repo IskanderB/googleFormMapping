@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\File\Adapter\GoogleFilesystemAdapter;
 use App\File\Adapter\LocalFilesystemAdapter;
 use App\File\Adapter\TemporaryFilesystemAdapter;
+use App\Service\Lock\LockService;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->when('temporary.filesystem')
             ->needs('$storage')
             ->give('temporary');
+
+        $this->app->bind(LockService::class, function (Application $app) {
+            return new LockService(env('LOCK_TIME', 5));
+        });
     }
 
     /**

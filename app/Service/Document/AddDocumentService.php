@@ -5,6 +5,8 @@ namespace App\Service\Document;
 use App\Entity\File\Layout;
 use App\Entity\Row\Row;
 use App\Entity\Task\TaskField;
+use App\Event\Document\AfterAddDocumentsEvent;
+use App\Event\Document\BeforeAddDocumentsEvent;
 use App\Message\GenerateDocumentMessage;
 use App\Repository\RowRepository;
 use LaravelDoctrine\ORM\Facades\EntityManager;
@@ -22,6 +24,8 @@ class AddDocumentService
         if ($row->getDocuments()->isEmpty() === false) {
             return;
         }
+
+        BeforeAddDocumentsEvent::dispatch($row);
 
         /** @var Layout $layout */
         foreach ($row->getTask()->getLayouts() as $layout) {
@@ -41,6 +45,17 @@ class AddDocumentService
         EntityManager::persist($row);
         EntityManager::flush();
 
+        if ($this->checkAllDocumentsAdded($row)) {
+            AfterAddDocumentsEvent::dispatch($row);
+        }
+    }
+
+    private function checkAllDocumentsAdded(Row $row): bool
+    {
+        $countLayouts = $row->getTask()->getLayouts()->count();
+        $countDocuments = $row->getDocuments()->count();
+
+        return $countLayouts === $countDocuments;
     }
 
     private function prepareContext(Row $row): array

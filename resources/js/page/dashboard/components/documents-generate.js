@@ -1,4 +1,5 @@
 import getCsrf from '../../../lib/get-csrf';
+import toggle from "../../../lib/toggle";
 
 let documentsCreateForms = document.querySelectorAll('.documents-create-form');
 
@@ -13,12 +14,15 @@ documentsCreateForms.forEach(form => {
             },
         });
 
-        if (response.ok) {
-            let json = await response.json();
+        let container = event.target.closest('.applications__actions--group');
+        let refreshIcon = container.querySelector('.documents-create-form');
+        let loadingIcon = container.querySelector('.applications__icon-loading');
 
-            console.log(json);
+        if (response.ok) {
+            toggle(refreshIcon, 'hidden');
+            toggle(loadingIcon, 'hidden');
         } else {
-            console.log('Refresh failed');
+            toggle(refreshIcon, 'hidden');
         }
     });
 });
