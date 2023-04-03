@@ -22,7 +22,7 @@ class TaskFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('spreadsheetId', TextType::class)
+            ->add('spreadsheetId', GoogleSheetUrlType::class)
             ->add('indexField', IndexType::class, [
                 'label' => false,
             ])

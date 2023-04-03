@@ -13,12 +13,12 @@ class LockService
     ) {
     }
 
-    public function isLocked(Lock $lock): bool
+    public function isLocked(?Lock $lock): bool
     {
-        return $lock->getLockedUntil() > new DateTime;
+        return $lock && $lock->getLockedUntil() > new DateTime;
     }
 
-    public function isUnlocked(Lock $lock): bool
+    public function isUnlocked(?Lock $lock): bool
     {
         return !$this->isLocked($lock);
     }
