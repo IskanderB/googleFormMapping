@@ -13,8 +13,12 @@ class ReplacebleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('sheetKey', TextType::class)
-            ->add('documentKey', TextType::class);
+            ->add('sheetKey', TextType::class, [
+                'label' => 'Поле в таблице',
+            ])
+            ->add('documentKey', TextType::class, [
+                'label' => 'Ключ в шаблоне',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -22,6 +26,9 @@ class ReplacebleType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ReplacebleField::class,
             'allow_extra_fields' => true,
+            'attr' => [
+                'class' => 'task-form__collection--row'
+            ],
         ]);
     }
 }

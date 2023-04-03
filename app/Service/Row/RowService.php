@@ -4,15 +4,29 @@ namespace App\Service\Row;
 
 use App\Dto\ShowDocumentDto;
 use App\Dto\ShowRowDto;
+use App\Entity\Row\Row;
 use App\Entity\Task\Task;
+use App\Event\File\FileRemovedEvent;
 use App\Repository\RowRepository;
 use App\Url\GoogleDocUrl;
+use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class RowService
 {
     public function __construct(
         private RowRepository $rowRepository,
     ) {
+    }
+
+    public function removeDocuments(Row $row): void
+    {
+        foreach ($row->getDocuments() as $document) {
+            $row->removeDocument($document);
+
+            FileRemovedEvent::dispatch($document);
+        }
+
+        EntityManager::flush();
     }
 
     public function get(Task $task): array

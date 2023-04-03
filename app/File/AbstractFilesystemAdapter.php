@@ -2,6 +2,7 @@
 
 namespace App\File;
 
+use App\Exceptions\FilesystemException;
 use Illuminate\Support\Facades\Storage;
 
 abstract class AbstractFilesystemAdapter implements FilesystemAdapterInterface
@@ -34,5 +35,16 @@ abstract class AbstractFilesystemAdapter implements FilesystemAdapterInterface
     public function getShowUrl(string $path): ?string
     {
         return null;
+    }
+
+    public function remove(string $path): void
+    {
+        $success = Storage::disk($this->storage)->delete($path);
+
+        if ($success) {
+            return;
+        }
+
+        throw new FilesystemException('File deleting is failed');
     }
 }

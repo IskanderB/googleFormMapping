@@ -29,10 +29,12 @@ Route::middleware('auth')->group(function () {
 
     Route::match(['get', 'post'],'/task/{task?}', [TaskController::class, 'task'])->name('task')->defaults('task', null);
     Route::post('/task/{currentTask}/refresh', [TaskController::class, 'refresh'])->name('task.refresh');
+    Route::post('/task/{currentTask}/layouts/{layout}/remove', [TaskController::class, 'removeLayout'])->name('task.layout.remove');
 
     Route::get('/dashboard/{currentTask?}', [DashboardController::class, 'dashboard'])->name('dashboard')->defaults('currentTask', null);
 
     Route::post('row/{row}/documents/generate', [RowController::class, 'generate'])->name('row.documents.generate');
+    Route::post('row/{row}/documents/remove', [RowController::class, 'removeDocuments'])->name('row.documents.remove');
 
     Route::get('/files/{file}/show', [FileController::class, 'show'])->name('file.show');
     Route::get('/files/{file}/download', [FileController::class, 'download'])->name('file.download');

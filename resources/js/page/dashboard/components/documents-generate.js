@@ -18,11 +18,10 @@ documentsCreateForms.forEach(form => {
         let refreshIcon = container.querySelector('.documents-create-form');
         let loadingIcon = container.querySelector('.applications__icon-loading');
 
+        toggle(refreshIcon, 'hidden');
+
         if (response.ok) {
-            toggle(refreshIcon, 'hidden');
             toggle(loadingIcon, 'hidden');
-        } else {
-            toggle(refreshIcon, 'hidden');
         }
     });
 });

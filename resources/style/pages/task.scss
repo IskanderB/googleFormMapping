@@ -1,0 +1,93 @@
+.task-form {
+    @apply mt-8 bg-white py-8 px-8 rounded-xl;
+
+    &__row {
+        @apply flex flex-col mb-6;
+    }
+
+    &__label {
+        @apply mb-2;
+    }
+
+    &__input {
+        @apply rounded-md border-1 border-base-gray focus:border-transparent focus:ring-2 focus:ring-base-gray-dark;
+    }
+
+    &__file-list {
+        @apply mb-4;
+    }
+
+    &__file {
+        @apply inline-flex mr-4;
+
+        &--item {
+            @apply bg-base-gray-lite py-1 px-4 rounded-lg inline-flex mb-2 mr-1 max-w-xl;
+        }
+
+        &--name {
+            @apply mr-2 overflow-hidden;
+        }
+
+        &--icon-trash {
+            @apply cursor-pointer mb-2;
+        }
+    }
+
+    &__file-input {
+        @apply block w-full text-sm text-gray-900 border-1 border-base-gray rounded-lg cursor-pointer bg-gray-50;
+
+        &::file-selector-button{
+            @apply bg-black border-0 text-white px-4 py-2 mr-4 cursor-pointer;
+        }
+
+        &:focus {
+            @apply border-transparent border-1 border-base-gray ring-1 outline-none ring-base-gray-dark;
+        }
+    }
+
+    &__collection {
+        @apply mb-4;
+
+        &--label {
+            @apply mb-6 font-semibold;
+        }
+
+        &--row {
+            @apply flex;
+
+            .form-group {
+                @apply flex flex-col mb-2 mr-6;
+
+                .form-control {
+                    @apply task-form__input;
+                }
+            }
+        }
+
+        &--container {
+            fieldset {
+                @apply flex;
+            }
+
+            .form {
+                &__collection {
+                    &--remove-button {
+                        @apply mt-[1rem];
+                    }
+                }
+            }
+        }
+    }
+
+    &__add-button {
+        @apply hover:text-base-gray;
+    }
+
+    &__save-button {
+        @apply flex shrink-0 justify-center px-2 py-2 text-base-white rounded-md bg-base-gray;
+
+        &:hover {
+            @apply bg-base-gray-dark;
+        }
+    }
+}

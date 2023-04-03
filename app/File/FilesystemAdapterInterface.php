@@ -63,4 +63,13 @@ interface FilesystemAdapterInterface
      * @return string|null
      */
     public function getShowUrl(string $path): ?string;
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     *
+     * @throws FilesystemException
+     */
+    public function remove(string $path): void;
 }

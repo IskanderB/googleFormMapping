@@ -16,6 +16,18 @@
     &__icon-settings:hover {
         @apply text-gray-400 duration-300;
     }
+
+    &__button {
+        @apply flex shrink-0 justify-center px-8 py-3.5 bg-base-gray text-base-white text-lg rounded-lg h-14 font-semibold w-full mr-4;
+
+        @screen md {
+            @apply w-auto;
+        }
+
+        &:hover {
+            @apply bg-base-gray-dark;
+        }
+    }
 }
 
 .applications {
@@ -101,17 +113,5 @@
         &--key {
             @apply w-[15rem] ml-2 mr-2;
         }
-    }
-}
-
-.button {
-    @apply flex shrink-0 justify-center px-8 py-3.5 bg-base-gray text-base-white text-lg rounded-lg h-14 font-semibold w-full mr-4;
-
-    @screen md {
-        @apply w-auto;
-    }
-
-    &:hover {
-        @apply bg-base-gray-dark;
     }
 }

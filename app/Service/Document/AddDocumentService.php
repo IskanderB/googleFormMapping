@@ -55,7 +55,7 @@ class AddDocumentService
         $countLayouts = $row->getTask()->getLayouts()->count();
         $countDocuments = $row->getDocuments()->count();
 
-        return $countLayouts === $countDocuments;
+        return $countLayouts <= $countDocuments;
     }
 
     private function prepareContext(Row $row): array

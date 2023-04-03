@@ -12,3 +12,4 @@ import.meta.glob([
 
 import './lib/svg-sprite.js';
 import './page/dashboard/index';
+import './page/task/index';

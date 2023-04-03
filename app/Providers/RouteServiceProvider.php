@@ -91,5 +91,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('file', function (string $uuid) use ($repository) {
             return $repository->findOneBy(['uuid' => $uuid]);
         });
+
+        Route::bind('layout', function (int $id) use ($repository) {
+            return $repository->findOneBy(['id' => $id]);
+        });
     }
 }

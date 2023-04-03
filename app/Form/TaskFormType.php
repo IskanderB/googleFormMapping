@@ -23,10 +23,9 @@ class TaskFormType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('spreadsheetId', TextType::class)
-            ->add('sheetName', TextType::class, [
-                'required' => false,
+            ->add('indexField', IndexType::class, [
+                'label' => false,
             ])
-            ->add('indexField', IndexType::class)
             ->add('previewField', PreviewType::class)
             ->add('replacebleFields', CollectionType::class, [
                 'entry_type' => ReplacebleType::class,
@@ -34,7 +33,8 @@ class TaskFormType extends AbstractType
                 'allow_add' => true,
                 'by_reference' => false,
                 'prototype' => true,
-                'label' => false
+                'label' => false,
+                'allow_delete' => true,
             ])
             ->add('layouts', FileType::class, [
                 'label' => 'Шаблоны',
@@ -61,8 +61,7 @@ class TaskFormType extends AbstractType
                         ],
                     ]),
                 ],
-            ])
-            ->add('save', SubmitType::class, ['label' => 'Save task']);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

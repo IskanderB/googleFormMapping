@@ -20,7 +20,7 @@
                         </div>
                     @endforeach
                 </div>
-                <a href="{{ route('task') }}" class="button">Добавить задачу</a>
+                <a href="{{ route('task') }}" class="tasks__button">Добавить задачу</a>
             </div>
             <div class="applications">
                 <div class="applications__header">
@@ -71,32 +71,40 @@
                             <div class="applications__column">
                                 <div class="applications__actions">
                                     <div class="applications__actions--group">
-                                        @if($row->getDocuments()->count() !== $currentTask->getLayouts()->count())
 
-                                            @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
+                                        @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
+                                        @php $documentsReady = $row->getDocuments()->count() >= $currentTask->getLayouts()->count() @endphp
 
-                                            <form class="max-h-0 documents-create-form {{ $rowLocked ? 'hidden' : '' }}" action="{{ route('row.documents.generate', ['row' => $row->getId()]) }}">
-                                                <button class="applications__action">
-                                                    <svg class="applications__icon-document-create">
-                                                        <use xlink:href="#icon-document-create"></use>
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                            <div class="applications__action applications__icon-loading {{ $rowLocked ? '' : 'hidden' }}">
-                                                <img src="{{ Vite::asset('resources/images/loading.gif') }}" alt="">
-                                            </div>
-                                        @else
-                                            <div class="applications__action">
-                                                <svg class="applications__icon-document-ready">
-                                                    <use xlink:href="#icon-document-ready"></use>
+                                        <form
+                                            class="max-h-0 documents-create-form {{ $rowLocked ? 'hidden' : '' }} {{ $documentsReady ? 'hidden' : '' }}"
+                                            action="{{ route('row.documents.generate', ['row' => $row->getId()]) }}"
+                                        >
+                                            <button class="applications__action">
+                                                <svg class="applications__icon-document-create">
+                                                    <use xlink:href="#icon-document-create"></use>
                                                 </svg>
-                                            </div>
-                                            <div class="applications__action">
+                                            </button>
+                                        </form>
+                                        <div
+                                            class="applications__action applications__icon-loading {{ $rowLocked ? '' : 'hidden' }} {{ $documentsReady ? 'hidden' : '' }}"
+                                        >
+                                            <img src="{{ Vite::asset('resources/images/loading.gif') }}" alt="">
+                                        </div>
+                                        <div class="applications__action applications__block-document-ready {{ $documentsReady ? '' : 'hidden' }}">
+                                            <svg class="applications__icon-document-ready">
+                                                <use xlink:href="#icon-document-ready"></use>
+                                            </svg>
+                                        </div>
+                                        <form
+                                            class="max-h-0 documents-remove-form {{ $documentsReady ? '' : 'hidden' }}"
+                                            action="{{ route('row.documents.remove', ['row' => $row->getId()]) }}"
+                                        >
+                                            <button class="applications__action">
                                                 <svg class="applications__icon-document-trash">
                                                     <use xlink:href="#icon-trash"></use>
                                                 </svg>
-                                            </div>
-                                        @endif
+                                            </button>
+                                        </form>
                                     </div>
                                     <div class="applications__actions--group">
                                         <div class="applications__icon-drop applications__icon-drop-up hidden">
