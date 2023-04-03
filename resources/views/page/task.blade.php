@@ -6,6 +6,17 @@
     </x-slot>
     <div class="container">
         <div class="task-form">
+            @php
+                /**
+                * @var \Symfony\Component\Form\FormView $form
+                */
+
+                /** @var App\Entity\Task\Task $task */
+                $task = $form->vars['data'];
+
+                $taskLocked = $task?->getLock()?->getLockedUntil() > new DateTime;
+            @endphp
+
             @formStart($form)
 
             <div class="task-form__row">
@@ -68,15 +79,6 @@
                     ],
                 ])
 
-                @php
-                    /**
-                    * @var \Symfony\Component\Form\FormView $form
-                    */
-
-                    /** @var App\Entity\Task\Task $task */
-                    $task = $form->vars['data'];
-                @endphp
-
                 @if($task->getLayouts()->isEmpty() === false)
                     <div class="task-form__file-list">
                         @foreach($task->getLayouts() as $layout)
@@ -87,15 +89,17 @@
                                         <use xlink:href="#icon-share"></use>
                                     </svg>
                                 </a>
-                                <button
-                                    class="task-form__file--icon-trash"
-                                    data-action="{{ route('task.layout.remove', ['currentTask' => $task->getId(), 'layout' => $layout->getId()]) }}"
-                                    type="button"
-                                >
-                                    <svg>
-                                        <use xlink:href="#icon-trash"></use>
-                                    </svg>
-                                </button>
+                                @if($taskLocked === false)
+                                    <button
+                                        class="task-form__file--icon-trash"
+                                        data-action="{{ route('task.layout.remove', ['currentTask' => $task->getId(), 'layout' => $layout->getId()]) }}"
+                                        type="button"
+                                    >
+                                        <svg>
+                                            <use xlink:href="#icon-trash"></use>
+                                        </svg>
+                                    </button>
+                                @endif
                             </div>
                         @endforeach
                     </div>
@@ -125,7 +129,38 @@
                     </svg>
                 </button>
             </div>
-            <button class="task-form__save-button" type="submit">Сохранить задачу</button>
+
+            <div class="task-form__save">
+                @if($taskLocked)
+                    <div class="task-form__save-help">
+                        Задача находится в процессе обновления, после его окончания вы сможете изменить данные
+                    </div>
+                @else
+                    <div class="task-form__button-list">
+                        <div class="task-form__button-group">
+                            <button class="task-form__save-button" type="submit">Сохранить задачу</button>
+                        </div>
+                        @if($task->getId())
+                            <div class="task-form__button-group">
+                                <button class="task-form__remove-button" type="button">Удалить задачу</button>
+                                <div class="task-form__remove-agree--box hidden">
+                                    <div class="task-form__remove-agree">
+                                        <div class="task-form__remove-agree--question">Вы уверены, что хотите удалить задачу?</div>
+                                        <button
+                                            type="button"
+                                            class="task-form__remove-agree--button-agree"
+                                            data-action="{{ route('task.remove', ['currentTask' => $task->getId()]) }}"
+                                        >
+                                            Да
+                                        </button>
+                                        <button type="button" class="task-form__remove-agree--button-disagree">Нет</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+            </div>
 
             @formEnd($form)
         </div>

@@ -6,7 +6,9 @@ use App\Entity\File\Layout;
 use App\Entity\Task\Task;
 use App\Form\TaskFormType;
 use App\Service\LayoutRemoveService;
+use App\Service\Lock\LockService;
 use App\Service\RefreshTaskService;
+use App\Service\RemoveTaskService;
 use App\Service\StoreTaskService;
 use Barryvdh\Form\CreatesForms;
 use Barryvdh\Form\ValidatesForms;
@@ -23,6 +25,8 @@ class TaskController extends Controller
         private RefreshTaskService $refreshTaskService,
         private StoreTaskService $storeTaskService,
         private LayoutRemoveService $layoutRemoveService,
+        private RemoveTaskService $removeTaskService,
+        private LockService $lockService,
     ) {
     }
 
@@ -32,7 +36,7 @@ class TaskController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $this->lockService->isUnlocked($task->getLock())) {
             $this->storeTask($task, $form);
         }
 
@@ -43,19 +47,35 @@ class TaskController extends Controller
 
     public function refresh(Task $task): JsonResponse
     {
-        $this->refreshTaskService->refresh($task);
+        if ($this->lockService->isUnlocked($task->getLock())) {
+            $this->refreshTaskService->refresh($task);
+        }
 
         return response()->json([
             'success' => true,
         ]);
     }
 
+    public function remove(Task $currentTask): JsonResponse
+    {
+        if ($this->lockService->isUnlocked($currentTask->getLock())) {
+            $this->removeTaskService->remove($currentTask);
+        }
+
+        return response()->json([
+            'success' => true,
+            'redirectUrl' => route('dashboard'),
+        ]);
+    }
+
     public function removeLayout(Task $currentTask, Layout $layout): JsonResponse
     {
-        $this->layoutRemoveService->removeLayout(
-            layout: $layout,
-            task: $currentTask,
-        );
+        if ($this->lockService->isUnlocked($currentTask->getLock())) {
+            $this->layoutRemoveService->removeLayout(
+                layout: $layout,
+                task: $currentTask,
+            );
+        }
 
         return response()->json([
             'success' => true,

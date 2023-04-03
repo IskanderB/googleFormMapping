@@ -44,7 +44,7 @@
                             </div>
                             <div class="applications__actions--group">
                                 @if($currentTask !== null)
-                                    @php $currentTaskLocked = $currentTask->getLock()->getLockedUntil() > new DateTime @endphp
+                                    @php $currentTaskLocked = $currentTask->getLock()->getLockedUntil() > new DateTime; @endphp
 
                                     <form id="task-refresh-form" class="max-h-0 {{ $currentTaskLocked ? 'hidden' : '' }}" action="{{ route('task.refresh', ['currentTask' => $currentTask->getId()]) }}">
                                         <button>

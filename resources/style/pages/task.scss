@@ -83,11 +83,55 @@
         @apply hover:text-base-gray;
     }
 
+    &__save-help {
+        @apply text-sm text-base-red;
+    }
+
     &__save-button {
         @apply flex shrink-0 justify-center px-2 py-2 text-base-white rounded-md bg-base-gray;
 
         &:hover {
             @apply bg-base-gray-dark;
+        }
+    }
+
+    &__remove-button {
+        @apply shrink-0 justify-center px-2 py-2 text-base-white rounded-md bg-base-red;
+
+        &:hover {
+            @apply opacity-70;
+        }
+    }
+
+    &__button-list {
+        @apply flex justify-between;
+    }
+
+    &__button-group {
+        @apply flex;
+    }
+
+    &__remove-agree {
+        @apply flex;
+
+        &--question {
+            @apply py-2;
+        }
+
+        &--button-agree {
+            @apply flex shrink-0 justify-center px-5 py-2 text-base-white rounded-md bg-base-red ml-2;
+
+            &:hover {
+                @apply opacity-70;
+            }
+        }
+
+        &--button-disagree {
+            @apply flex shrink-0 justify-center px-4 py-2 text-base-white rounded-md bg-base-gray ml-2;
+
+            &:hover {
+                @apply bg-base-gray-dark;
+            }
         }
     }
 }

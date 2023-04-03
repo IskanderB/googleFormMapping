@@ -13,6 +13,16 @@ class LockService
     ) {
     }
 
+    public function isLocked(Lock $lock): bool
+    {
+        return $lock->getLockedUntil() > new DateTime;
+    }
+
+    public function isUnlocked(Lock $lock): bool
+    {
+        return !$this->isLocked($lock);
+    }
+
     public function lock(Lock $lock): void
     {
         $lockedUntil = (new DateTime())->modify(sprintf('+%s minutes', $this->lockTime));

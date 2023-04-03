@@ -41,6 +41,7 @@ class Task
     private ?Lock $lock = null;
 
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: Row::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     private Collection $rows;
 
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: ReplacebleField::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -164,18 +165,18 @@ class Task
     }
 
     /**
-     * @return Lock
+     * @return Lock|null
      */
-    public function getLock(): Lock
+    public function getLock(): ?Lock
     {
         return $this->lock;
     }
 
     /**
-     * @param Lock $lock
+     * @param Lock|null $lock
      * @return Task
      */
-    public function setLock(Lock $lock): Task
+    public function setLock(?Lock $lock): Task
     {
         $this->lock = $lock;
         return $this;

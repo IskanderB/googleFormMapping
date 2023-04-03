@@ -56,6 +56,7 @@ module.exports = {
                     'gray': '#979dac', // Шиферный серый
                     'gray-dark': '#838895',
                     'gray-lite': '#d4def0',
+                    'red': '#ff0f0f',
                 },
             },
         },
