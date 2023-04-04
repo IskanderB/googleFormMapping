@@ -13,8 +13,8 @@ use App\Service\StoreTaskService;
 use Barryvdh\Form\CreatesForms;
 use Barryvdh\Form\ValidatesForms;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Symfony\Component\Form\FormInterface;
 
 class TaskController extends Controller
@@ -30,7 +30,7 @@ class TaskController extends Controller
     ) {
     }
 
-    public function task(Request $request, Task $task): View
+    public function task(Request $request, Task $task)
     {
         $form = $this->createForm(TaskFormType::class, $task);
 
@@ -38,6 +38,8 @@ class TaskController extends Controller
 
         if ($form->isSubmitted() && $form->isValid() && $this->lockService->isUnlocked($task->getLock())) {
             $this->storeTask($task, $form);
+
+            return new RedirectResponse(route('task', ['task' => $task->getId()]));
         }
 
         return view('page.task', [

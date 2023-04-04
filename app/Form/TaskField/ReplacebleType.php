@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ReplacebleType extends AbstractType
 {
@@ -15,9 +16,35 @@ class ReplacebleType extends AbstractType
         $builder
             ->add('sheetKey', TextType::class, [
                 'label' => 'Поле в таблице',
+                'label_attr' => [
+                    'class' => 'task-form__collection--row-label',
+                ],
+                'attr' => [
+                    'class' => 'task-form__sluggable-input',
+                ],
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(
+                        allowNull: false,
+                        message: 'Обязательно для заполнения',
+                    ),
+                ],
             ])
             ->add('documentKey', TextType::class, [
                 'label' => 'Ключ в шаблоне',
+                'label_attr' => [
+                    'class' => 'task-form__collection--row-label',
+                ],
+                'attr' => [
+                    'class' => 'task-form__sluggable-target',
+                ],
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(
+                        allowNull: false,
+                        message: 'Обязательно для заполнения',
+                    ),
+                ],
             ]);
     }
 

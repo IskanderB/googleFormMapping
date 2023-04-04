@@ -6,11 +6,23 @@
     }
 
     &__label {
-        @apply mb-2;
+        @apply mb-2 flex flex-col;
+
+        .invalid-feedback {
+            @apply text-base-red;
+        }
+
+        .form-error-icon {
+            @apply hidden;
+        }
     }
 
     &__input {
         @apply rounded-md border-1 border-base-gray focus:border-transparent focus:ring-2 focus:ring-base-gray-dark;
+
+        &.is-invalid {
+            @apply border-base-red;
+        }
     }
 
     &__file-list {
@@ -61,6 +73,18 @@
                 .form-control {
                     @apply task-form__input;
                 }
+            }
+        }
+
+        &--row-label {
+            @apply flex flex-col;
+
+            .invalid-feedback {
+                @apply text-base-red;
+            }
+
+            .form-error-icon {
+                @apply hidden;
             }
         }
 

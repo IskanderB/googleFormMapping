@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class GoogleSheetUrlType extends AbstractType
 {
@@ -17,8 +18,10 @@ class GoogleSheetUrlType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'setter' => function (Task &$task, string $spreadsheetUrl, FormInterface $form) {
-                $task->setSpreadsheetId(GoogleSheetUrl::fromUrl($spreadsheetUrl)->getCloudId());
+            'setter' => function (Task &$task, ?string $spreadsheetUrl, FormInterface $form) {
+                $task->setSpreadsheetId(
+                    $spreadsheetUrl ? GoogleSheetUrl::fromUrl($spreadsheetUrl)->getCloudId() : null
+                );
             },
             'getter' => function (Task $task, FormInterface $form): ?string {
                 $spreadsheetId = $task->getSpreadsheetId();
@@ -27,6 +30,13 @@ class GoogleSheetUrlType extends AbstractType
                     ? GoogleSheetUrl::fromCloudId($spreadsheetId)->getUrl()
                     : null;
             },
+            'required' => false,
+            'constraints' => [
+                new NotBlank(
+                    allowNull: false,
+                    message: 'Обязательно для заполнения',
+                ),
+            ],
         ]);
     }
 

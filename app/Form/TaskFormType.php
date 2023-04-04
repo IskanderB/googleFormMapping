@@ -15,18 +15,38 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TaskFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('spreadsheetId', GoogleSheetUrlType::class)
+            ->add('name', TextType::class, [
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(
+                        allowNull: false,
+                        message: 'Обязательно для заполнения',
+                    ),
+                ],
+            ])
+            ->add('spreadsheetId', GoogleSheetUrlType::class, [
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(
+                        allowNull: false,
+                        message: 'Обязательно для заполнения',
+                    ),
+                ],
+            ])
             ->add('indexField', IndexType::class, [
                 'label' => false,
+                'required' => false,
             ])
-            ->add('previewField', PreviewType::class)
+            ->add('previewField', PreviewType::class, [
+                'required' => false,
+            ])
             ->add('replacebleFields', CollectionType::class, [
                 'entry_type' => ReplacebleType::class,
                 'entry_options' => ['label' => false],
@@ -35,6 +55,7 @@ class TaskFormType extends AbstractType
                 'prototype' => true,
                 'label' => false,
                 'allow_delete' => true,
+                'required' => false,
             ])
             ->add('layouts', FileType::class, [
                 'label' => 'Шаблоны',
