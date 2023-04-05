@@ -11,7 +11,7 @@ services:
             - postgresql_data:/var/lib/postgresql/data
             - ./docker-files:/tmp/dump
         ports:
-            - "6432:5432"
+            - "5432:5432"
 
     form.php:
         container_name: "${APP_NAME}_php"
