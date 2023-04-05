@@ -41,7 +41,7 @@ return [
         ],
 
         'layout' => [
-            'driver' => 'local',
+            'driver' => 'google',
             'root' => storage_path('layout'),
             'throw' => false,
         ],

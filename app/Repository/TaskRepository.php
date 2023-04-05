@@ -17,8 +17,18 @@ class TaskRepository extends EntityRepository
     {
         return $this
             ->createQueryBuilder('t')
+            ->orderBy('t.id', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getTasks(): array
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->orderBy('t.id', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

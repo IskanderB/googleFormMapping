@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->alias(LocalFilesystemAdapter::class, 'layout.filesystem');
+        $this->app->alias(GoogleFilesystemAdapter::class, 'layout.filesystem');
         $this->app->when('layout.filesystem')
             ->needs('$storage')
             ->give('layout');

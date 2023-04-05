@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function dashboard(?Task $currentTask = null): View
     {
         return view('page.dashboard', [
-            'tasks' => $this->taskRepository->findAll(),
+            'tasks' => $this->taskRepository->getTasks(),
             'currentTask' => $currentTask,
             'rows' => $currentTask ? $this->rowRepository->findBy(['task' => $currentTask]) : [],
         ]);

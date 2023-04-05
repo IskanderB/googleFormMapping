@@ -58,11 +58,17 @@ class AddDocumentService
         return $countLayouts <= $countDocuments;
     }
 
-    private function prepareContext(Row $row): array
+    public function prepareContext(Row $row): array
     {
         $fields = $row->getTask()->getReplacebleFields();
 
-        $rowContext = $row->getContent();
+        $rowContextRaw = $row->getContent();
+
+        $rowContext = [];
+
+        foreach ($rowContextRaw as $key => $value) {
+            $rowContext[preg_replace('/\s+/', ' ', $key)] = $value;
+        }
 
         $context = [];
 
