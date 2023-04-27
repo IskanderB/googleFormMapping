@@ -25,22 +25,34 @@
             <div class="applications">
                 <div class="applications__header">
                     <div class="applications__checkbox">
-                        <input type="checkbox">
+                        <input type="checkbox" class="row-checkbox__main">
                     </div>
                     <div class="applications__column font-semibold">{{ $currentTask ? $currentTask->getPreviewField()->getSheetKey() : 'Превью' }}</div>
                     <div class="applications__column">
                         <div class="applications__actions">
                             <div class="applications__actions--group">
                                 <div class="applications__action">
-                                    <svg class="applications__icon-document-ready">
-                                        <use xlink:href="#icon-document-ready"></use>
-                                    </svg>
+                                    <form
+                                        class="max-h-0 documents-multiple-create-form"
+                                        action="{{ route('row.documents.generate.multiple') }}"
+                                    >
+                                        <button>
+                                            <svg class="applications__icon-document-create">
+                                                <use xlink:href="#icon-document-create"></use>
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
-                                <div class="applications__action">
-                                    <svg class="applications__icon-document-trash">
-                                        <use xlink:href="#icon-trash"></use>
-                                    </svg>
-                                </div>
+                                <form
+                                    class="max-h-0 documents-multiple-remove-form"
+                                    action="{{ route('row.documents.remove.multiple') }}"
+                                >
+                                    <button class="applications__action">
+                                        <svg class="applications__icon-document-trash">
+                                            <use xlink:href="#icon-trash"></use>
+                                        </svg>
+                                    </button>
+                                </form>
                             </div>
                             <div class="applications__actions--group">
                                 @if($currentTask !== null)
@@ -63,19 +75,23 @@
                 </div>
                 @if($currentTask !== null)
                     @foreach($currentTask->getRows() as $row)
-                        <div class="applications__item">
+                        @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
+                        @php $documentsReady = $row->getDocuments()->count() >= $currentTask->getLayouts()->count() @endphp
+
+                        <div
+                            class="applications__item"
+                            data-id="{{ $row->getId() }}"
+                            data-generate="{{ !$rowLocked && !$documentsReady }}"
+                            data-remove="{{ !$rowLocked && $documentsReady }}"
+                        >
                             <div class="applications__preview">
                                 <div class="applications__checkbox">
-                                    <input type="checkbox">
+                                    <input type="checkbox" class="row-checkbox__item">
                                 </div>
                                 <div class="applications__column">{{ $row->getContent()[$currentTask->getPreviewField()->getSheetKey()] ?? 'Нет совпадений с превью' }}</div>
                                 <div class="applications__column">
                                     <div class="applications__actions">
                                         <div class="applications__actions--group">
-
-                                            @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
-                                            @php $documentsReady = $row->getDocuments()->count() >= $currentTask->getLayouts()->count() @endphp
-
                                             <form
                                                 class="max-h-0 documents-create-form {{ $rowLocked ? 'hidden' : '' }} {{ $documentsReady ? 'hidden' : '' }}"
                                                 action="{{ route('row.documents.generate', ['row' => $row->getId()]) }}"

@@ -35,7 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{currentTask?}', [DashboardController::class, 'dashboard'])->name('dashboard')->defaults('currentTask', null);
 
     Route::post('row/{row}/documents/generate', [RowController::class, 'generate'])->name('row.documents.generate');
+    Route::post('row/documents/generate-multiple', [RowController::class, 'generateMultiple'])->name('row.documents.generate.multiple');
     Route::post('row/{row}/documents/remove', [RowController::class, 'removeDocuments'])->name('row.documents.remove');
+    Route::post('row/documents/remove-multiple', [RowController::class, 'removeDocumentsMultiple'])->name('row.documents.remove.multiple');
 
     Route::get('/files/{file}/show', [FileController::class, 'show'])->name('file.show');
     Route::get('/files/{file}/download', [FileController::class, 'download'])->name('file.download');
