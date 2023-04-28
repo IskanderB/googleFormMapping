@@ -6,10 +6,13 @@ use App\Entity\Row\Row;
 use App\Entity\Task\Task;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\ResultSetMapping;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
 class RowRepository extends EntityRepository
 {
+    use PaginatesFromParams;
+
     public function __construct(EntityManagerInterface $em)
     {
         parent::__construct($em, $em->getClassMetadata(Row::class));
@@ -28,37 +31,15 @@ class RowRepository extends EntityRepository
             ->getResult();
     }
 
-    public function getRows(Task $task)
+    public function getRows(Task $task, int $page = 1, int $limit = 10): LengthAwarePaginator
     {
-        $sql = <<<SQL
-        SELECT r.id as id, r.content as content,
-               jsonb_agg(
-                   json_build_object(
-                   'originalName', f.original_name,
-                   'storage', f.storage,
-                   'path', f.path,
-                   'uuid', f.uuid
-                    )
-               ) as documents
-        FROM rows r
-        LEFT JOIN rows_documents d
-        ON d.row_id = r.id
-        LEFT JOIN files f
-        ON f.id = d.document_id
-        WHERE r.task_id = :task
-        GROUP BY r.id, r.content
-        SQL;
+        $query = $this
+            ->createQueryBuilder('r')
+            ->where('r.task = :task')
+            ->setParameter('task', $task)
+            ->orderBy('r.id', 'DESC')
+            ->getQuery();
 
-
-        $rsm = (new ResultSetMapping())
-            ->addScalarResult('id', 'id', 'integer')
-            ->addScalarResult('content', 'content', 'jsonb')
-            ->addScalarResult('documents', 'documents', 'jsonb');
-
-        return $this
-            ->getEntityManager()
-            ->createNativeQuery($sql, $rsm)
-            ->setParameter('task', $task->getId())
-            ->getResult();
+        return $this->paginate($query, $limit, $page);
     }
 }

@@ -1,3 +1,8 @@
+@php
+
+    use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -74,7 +79,14 @@
                     </div>
                 </div>
                 @if($currentTask !== null)
-                    @foreach($currentTask->getRows() as $row)
+                    @php
+
+                        /**
+                         * @var LengthAwarePaginator $rowPaginator
+                         */
+
+                    @endphp
+                    @foreach($rowPaginator->items() as $row)
                         @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
                         @php $documentsReady = $row->getDocuments()->count() >= $currentTask->getLayouts()->count() @endphp
 
@@ -168,6 +180,45 @@
                             </div>
                         </div>
                     @endforeach
+                @endif
+                @php
+
+                    $limitPage = 4;
+                    $currentPage = $rowPaginator->currentPage();
+                    $lastPage = $rowPaginator->lastPage();
+
+                    $firstRangedPage = max($currentPage - $limitPage + 1, 1);
+                    $lastRangedPage = min($firstRangedPage + $limitPage, $rowPaginator->lastPage());
+
+                    $pageUrlRange = $rowPaginator->getUrlRange($firstRangedPage, $lastRangedPage);
+
+                @endphp
+                @if($lastPage > 1)
+                    <div class="pagination">
+                        <div class="pagination__list">
+                            @if($firstRangedPage > 1)
+                                <a href="{{ $rowPaginator->url(1) }}" class="pagination__number--wrap bg-base-gray">
+                                    <div class="pagination__number">1</div>
+                                </a>
+                                <div class="pagination__break">
+                                    ...
+                                </div>
+                            @endif
+                            @foreach($pageUrlRange as $pageNumber => $pageUrl)
+                                <a href="{{ $pageUrl }}" class="pagination__number--wrap {{ $pageNumber === $currentPage ? 'bg-black' : 'bg-base-gray' }}">
+                                    <div class="pagination__number">{{ $pageNumber }}</div>
+                                </a>
+                            @endforeach
+                            @if($lastPage > $lastRangedPage)
+                                <div class="pagination__break">
+                                    ...
+                                </div>
+                                <a href="{{ $rowPaginator->url($lastPage) }}" class="pagination__number--wrap bg-base-gray">
+                                    <div class="pagination__number">{{ $lastPage }}</div>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>

@@ -115,3 +115,21 @@
         }
     }
 }
+
+.pagination {
+    @apply flex justify-center mt-5;
+
+    &__list {
+        @apply w-[350px] flex justify-between;
+    }
+
+    &__number {
+        &--wrap {
+            @apply text-base-white w-[40px] h-[40px] leading-[40px] text-center rounded-full;
+        }
+    }
+
+    &__break {
+        @apply leading-[40px];
+    }
+}

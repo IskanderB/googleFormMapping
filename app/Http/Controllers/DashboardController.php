@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entity\Task\Task;
 use App\Repository\RowRepository;
 use App\Repository\TaskRepository;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -15,12 +16,14 @@ class DashboardController extends Controller
     ) {
     }
 
-    public function dashboard(?Task $currentTask = null): View
+    public function dashboard(Request $request, ?Task $currentTask = null): View
     {
         return view('page.dashboard', [
             'tasks' => $this->taskRepository->getTasks(),
             'currentTask' => $currentTask,
-            'rows' => $currentTask ? $this->rowRepository->findBy(['task' => $currentTask]) : [],
+            'rowPaginator' => $currentTask
+                ? $this->rowRepository->getRows($currentTask, $request->query('page', 1))
+                : [],
         ]);
     }
 }
