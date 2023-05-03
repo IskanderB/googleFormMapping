@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Enum\Role;
 use App\File\Adapter\GoogleFilesystemAdapter;
 use App\File\Adapter\LocalFilesystemAdapter;
 use App\File\Adapter\TemporaryFilesystemAdapter;
+use App\Http\Middleware\IsAdmin;
 use App\Service\Lock\LockService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -35,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(LockService::class, function (Application $app) {
             return new LockService(env('LOCK_TIME', 5));
+        });
+
+        $this->app->bind(IsAdmin::class, function (Application $app) {
+            return new IsAdmin(Role::ROLE_ADMIN);
         });
     }
 

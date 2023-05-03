@@ -1,0 +1,21 @@
+.users {
+    &__container {
+        @apply w-[500px] mt-8;
+    }
+
+    &__add-button {
+        @apply flex shrink-0 justify-center px-8 py-3.5 bg-base-gray text-base-white text-lg rounded-lg h-14 font-semibold w-full mb-6;
+    }
+
+    &__item {
+        @apply flex items-center justify-between mb-4 bg-white p-4 rounded-lg h-[72px];
+    }
+
+    &__remove-button {
+        @apply shrink-0 justify-center px-2 py-2 text-base-white rounded-md bg-base-red;
+
+        &:hover {
+            @apply opacity-70;
+        }
+    }
+}

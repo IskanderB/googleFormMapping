@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Role;
 use App\Repository\UserRepository;
 use DateTime;
 use DateTimeInterface;
@@ -42,6 +43,9 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $updatedAt = null;
+
+    #[ORM\Column(type: 'jsonb', nullable: true, options: ['jsonb' => true])]
+    private array $roles = [];
 
     public function __construct()
     {
@@ -194,6 +198,28 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable
     public function setUpdatedAt(?DateTimeInterface $updatedAt): User
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        $roles[] = Role::ROLE_USER->value;
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param array $roles
+     * @return User
+     */
+    public function setRoles(array $roles): User
+    {
+        $this->roles = $roles;
         return $this;
     }
 }
