@@ -16,11 +16,13 @@
                         {{ 'Задачи' }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
-                        {{ 'Пользователи' }}
-                    </x-nav-link>
-                </div>
+                @if(in_array(\App\Enum\Role::ROLE_ADMIN->value, Auth::user()->getRoles()))
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index')">
+                            {{ 'Пользователи' }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

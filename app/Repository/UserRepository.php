@@ -21,4 +21,17 @@ class UserRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getUserEmailsByHost(string $emailHost): array
+    {
+        $queryBuilder = $this
+            ->createQueryBuilder('u')
+            ->select('u.email');
+
+        return $queryBuilder
+            ->where($queryBuilder->expr()->like('u.email', ':email_host'))
+            ->setParameter('email_host', '%' . $emailHost)
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
 }

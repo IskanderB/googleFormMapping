@@ -3,6 +3,7 @@
 namespace App\File\Adapter;
 
 use App\File\AbstractFilesystemAdapter;
+use App\Service\User\GoogleUserService;
 use App\Url\GoogleDocUrl;
 use Google\Service\Drive\Permission;
 use Masbug\Flysystem\GoogleDriveAdapter;
@@ -12,6 +13,7 @@ class GoogleFilesystemAdapter extends AbstractFilesystemAdapter
     public function __construct(
         string $storage,
         private GoogleDriveAdapter $adapter,
+        private readonly GoogleUserService $googleUserService,
     ) {
         parent::__construct($storage);
     }
@@ -47,16 +49,20 @@ class GoogleFilesystemAdapter extends AbstractFilesystemAdapter
 
     private function setPermission(string $cloudId): void
     {
-        $permission = new Permission([
-            'type' => 'anyone',
-            'role' => 'writer',
-            'allowFileDiscovery' => false,
-        ]);
+        $emails = $this->googleUserService->getGoogleUserEmails();
 
-        $this
-            ->adapter
-            ->getService()
-            ->permissions
-            ->create($cloudId, $permission);
+        foreach ($emails as $email) {
+            $permission = new Permission([
+                'type' => 'user',
+                'role' => 'writer',
+                'emailAddress' => $email,
+            ]);
+
+            $this
+                ->adapter
+                ->getService()
+                ->permissions
+                ->create($cloudId, $permission);
+        }
     }
 }
