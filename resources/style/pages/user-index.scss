@@ -1,4 +1,10 @@
 .users {
+    @apply flex justify-center px-4;
+
+    @screen md {
+        @apply px-0;
+    }
+
     &__container {
         @apply w-[500px] mt-8;
     }

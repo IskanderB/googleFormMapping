@@ -65,7 +65,11 @@
         }
 
         &--row {
-            @apply flex;
+            @apply flex flex-col;
+
+            @screen md {
+                @apply flex-row;
+            }
 
             .form-group {
                 @apply flex flex-col mb-2 mr-6;

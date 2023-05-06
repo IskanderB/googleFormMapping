@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <div class="container">
-        <div class="flex justify-center users">
+        <div class="users">
             <div class="users__container">
                 <a href="{{ route('add.user') }}" class="users__add-button">Добавить пользователя</a>
                 @foreach($users as $user)
