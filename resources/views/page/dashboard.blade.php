@@ -15,9 +15,9 @@
             <div class="tasks">
                 <div class="tasks__list">
                     @foreach($tasks as $task)
-                        <div class="tasks__item">
-                            <a href="{{ route('dashboard', ['currentTask' => $task->getId()]) }}">{{ $task->getName() }}</a>
-                            <a href="{{ route('task', ['task' => $task->getId()]) }}" target="_blank">
+                        <div class="tasks__item {{ $currentTask->getId() === $task->getId() ? 'shadow-active text-base-yellow' : 'shadow-regular'}}">
+                            <a class="tasks__item--link" href="{{ route('dashboard', ['currentTask' => $task->getId()]) }}">{{ $task->getName() }}</a>
+                            <a class="tasks__item--settings" href="{{ route('task', ['task' => $task->getId()]) }}" target="_blank">
                                 <svg class="tasks__icon-settings">
                                     <use xlink:href="#icon-settings"></use>
                                 </svg>

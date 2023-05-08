@@ -22,11 +22,19 @@
     }
 
     &__item {
-        @apply bg-white mb-2 p-6 rounded-2xl flex justify-between;
-    }
+        @apply bg-white mb-2 pr-6 rounded-2xl flex justify-between;
 
-    &__icon-settings:hover {
-        @apply text-gray-400 duration-300;
+        &--link {
+            @apply w-full pt-6 pb-6 pl-6;
+        }
+
+        &--settings {
+            @apply mt-6;
+        }
+
+        a:hover {
+            @apply text-gray-400 duration-300;
+        }
     }
 
     &__button {

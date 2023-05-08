@@ -57,8 +57,13 @@ module.exports = {
                     'gray-dark': '#838895',
                     'gray-lite': '#d4def0',
                     'red': '#ff0f0f',
+                    'yellow': '#edc015',
                 },
             },
+            boxShadow: {
+                regular:  '10px 5px 5px #979dac',
+                active: '10px 5px 5px #edc015',
+            }
         },
     },
 
