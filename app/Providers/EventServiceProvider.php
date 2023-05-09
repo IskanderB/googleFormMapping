@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\EventListener\DocumentEventListener;
+use App\EventListener\FileEventListener;
+use App\EventListener\RowEventListener;
 use App\EventListener\TaskEventListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -24,6 +26,8 @@ class EventServiceProvider extends ServiceProvider
     protected $subscribe = [
         DocumentEventListener::class,
         TaskEventListener::class,
+        FileEventListener::class,
+        RowEventListener::class,
     ];
 
     /**

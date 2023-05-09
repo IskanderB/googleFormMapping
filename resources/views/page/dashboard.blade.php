@@ -88,7 +88,7 @@
                     @endphp
                     @foreach($rowPaginator->items() as $row)
                         @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
-                        @php $documentsReady = $row->getDocuments()->count() >= $currentTask->getLayouts()->count() @endphp
+                        @php $documentsReady = $row->getDocuments()->count() >= $currentTask->getLayouts()->count() && $currentTask->getLayouts()->count() > 0 @endphp
 
                         <div
                             class="applications__item"

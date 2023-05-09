@@ -4,13 +4,16 @@ namespace App\EventListener;
 
 use App\Event\Task\AfterTaskRefreshEvent;
 use App\Event\Task\BeforeTaskRefreshEvent;
+use App\Event\Task\TaskCreatedEvent;
 use App\Service\Lock\LockService;
+use App\Service\RefreshTaskService;
 use Illuminate\Events\Dispatcher;
 
 class TaskEventListener
 {
     public function __construct(
-        private LockService $lockService,
+        private readonly LockService $lockService,
+        private readonly RefreshTaskService $refreshTaskService,
     ) {
     }
 
@@ -25,6 +28,18 @@ class TaskEventListener
             AfterTaskRefreshEvent::class,
             [self::class, 'unLockTask'],
         );
+
+        $events->listen(
+            TaskCreatedEvent::class,
+            [self::class, 'refreshTask'],
+        );
+    }
+
+    public function refreshTask(TaskCreatedEvent $event): void
+    {
+        $task = $event->getTask();
+
+        $this->refreshTaskService->refresh($task);
     }
 
     public function lockTask(BeforeTaskRefreshEvent $event): void

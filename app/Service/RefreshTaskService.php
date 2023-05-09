@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Lock\Lock;
 use App\Entity\Row\Row;
 use App\Entity\Task\Task;
+use App\Event\Row\RowCreatedEvent;
 use App\Event\Task\AfterTaskRefreshEvent;
 use App\Event\Task\BeforeTaskRefreshEvent;
 use App\Message\TaskMessage;
@@ -54,9 +55,11 @@ class RefreshTaskService
             EntityManager::persist($rowEntity);
 
             $task->addRow($rowEntity);
-        }
 
-        EntityManager::flush();
+            EntityManager::flush();
+
+            RowCreatedEvent::dispatch($rowEntity);
+        }
 
         AfterTaskRefreshEvent::dispatch($task);
     }

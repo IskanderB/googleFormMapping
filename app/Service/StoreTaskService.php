@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\File\Layout;
 use App\Entity\Task\Task;
+use App\Event\Task\TaskCreatedEvent;
 use App\Service\File\UploadFileService;
 use App\Entity\Lock\Lock;
 use LaravelDoctrine\ORM\Facades\EntityManager;
@@ -47,6 +48,8 @@ class StoreTaskService
             EntityManager::flush();
 
             EntityManager::commit();
+
+            TaskCreatedEvent::dispatch($task);
         } catch (Throwable $throwable) {
             EntityManager::rollback();
 
