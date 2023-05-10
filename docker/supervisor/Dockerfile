@@ -16,6 +16,10 @@ RUN apt-get update && apt-get upgrade -y \
     && docker-php-ext-enable memcached \
     && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y
 
+COPY crontab /etc/cron.d/submarine-crontab
+RUN chmod 0644 /etc/cron.d/submarine-crontab && \
+    crontab /etc/cron.d/submarine-crontab
+
 RUN mkdir -p "/etc/supervisor/logs"
 
 COPY ./worker.conf /etc/supervisor/conf.d/worker.conf
