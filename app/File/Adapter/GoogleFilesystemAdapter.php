@@ -56,6 +56,7 @@ class GoogleFilesystemAdapter extends AbstractFilesystemAdapter
                 'type' => 'user',
                 'role' => 'writer',
                 'emailAddress' => $email,
+                'sendNotificationEmail' => false,
             ]);
 
             $this
