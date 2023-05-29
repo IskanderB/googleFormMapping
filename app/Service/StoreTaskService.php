@@ -49,7 +49,7 @@ class StoreTaskService
 
             EntityManager::commit();
 
-            TaskCreatedEvent::dispatch($task);
+//            TaskCreatedEvent::dispatch($task);
         } catch (Throwable $throwable) {
             EntityManager::rollback();
 
