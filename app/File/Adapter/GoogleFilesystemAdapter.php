@@ -56,14 +56,13 @@ class GoogleFilesystemAdapter extends AbstractFilesystemAdapter
                 'type' => 'user',
                 'role' => 'writer',
                 'emailAddress' => $email,
-                'sendNotificationEmail' => false,
             ]);
 
             $this
                 ->adapter
                 ->getService()
                 ->permissions
-                ->create($cloudId, $permission);
+                ->create($cloudId, $permission, ['sendNotificationEmail' => false]);
         }
     }
 }
