@@ -88,7 +88,7 @@
                     @endphp
                     @foreach($rowPaginator->items() as $row)
                         @php $rowLocked = $row->getLock()->getLockedUntil() > new DateTime @endphp
-                        @php $documentsReady = $row->getDocuments()->count() >= $currentTask->getLayouts()->count() && $currentTask->getLayouts()->count() > 0 @endphp
+                        @php $documentsReady = $row->getDocuments()->count() > 0 @endphp
 
                         <div
                             class="applications__item"
@@ -119,7 +119,7 @@
                                             >
                                                 <img src="{{ Vite::asset('resources/images/loading.gif') }}" alt="">
                                             </div>
-                                            <div class="applications__action applications__block-document-ready {{ $documentsReady ? '' : 'hidden' }}">
+                                            <div class="applications__action applications__block-document-ready {{ $row->getDocuments()->count() >= $currentTask->getLayouts()->count() && $currentTask->getLayouts()->count() > 0 ? '' : 'hidden' }}">
                                                 <svg class="applications__icon-document-ready">
                                                     <use xlink:href="#icon-document-ready"></use>
                                                 </svg>

@@ -56,8 +56,13 @@ class RefreshTaskService
 
             $task->addRow($rowEntity);
 
-            EntityManager::flush();
+//            EntityManager::flush();
 
+//            RowCreatedEvent::dispatch($rowEntity);
+        }
+EntityManager::flush();
+
+foreach ($task->getRows() as $rowEntity) {
             RowCreatedEvent::dispatch($rowEntity);
         }
 

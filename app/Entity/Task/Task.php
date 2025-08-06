@@ -50,7 +50,7 @@ class Task
     #[ORM\JoinTable(name: 'tasks_layouts')]
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'layout_id', referencedColumnName: 'id', unique: true)]
-    #[ORM\ManyToMany(targetEntity: Layout::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\ManyToMany(targetEntity: Layout::class, cascade: ['persist', 'remove'], orphanRemoval: true, fetch: 'EAGER')]
     private Collection $layouts;
 
     public function __construct()
